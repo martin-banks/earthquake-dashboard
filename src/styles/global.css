@@ -1,0 +1,153 @@
+@import url("https://use.typekit.net/onc3gku.css");
+
+
+html,
+body,
+header,
+main,
+article,
+section,
+div,
+pre
+span {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-size: 8px;
+  z-index: -1;
+}
+
+body {
+  box-sizing: border-box;
+  /* width: 100vw; */
+  min-height: 100vh;
+  height: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #0c0c0c;
+    /* background-image: linear-gradient(150deg, rgba(255,0,255, 0.05), rgba(0, 255,255, 0.05)); */
+    color: white
+  }
+  a {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html, body {
+    background: #eeeeee;
+    /* background-image: linear-gradient(150deg, rgba(162, 0, 255, 0.05), rgba(3, 218, 207, 0.05)); */
+    color: black !important;
+  }
+  a {
+    color: black;
+  }
+}
+
+article {
+  /* opacity: 0; */
+}
+
+h1 {
+  font-size: 7rem;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+  font-family: dharma-gothic-e, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  /* letter-spacing: 0.5rem; */
+}
+h2 {
+  font-size: 5rem;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+  font-family: dharma-gothic-e, sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  letter-spacing: 2px;
+}
+h3 {
+  font-family: dharma-gothic-e, sans-serif;
+  font-size: 4rem;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+  letter-spacing: 2px;
+}
+h4 {
+  font-family: dharma-gothic-e, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+h5 {
+  font-family: dharma-gothic-e, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 200;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+h6 {
+  font-family: dharma-gothic-e, sans-serif;
+  font-size: 2.3rem;
+  font-weight: 100;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 2rem;
+}
+li {
+  font-size: 2rem;
+}
+a {
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: 400;
+}
+
+path {
+  transition: fill 200ms;
+}
+
+pre.dump {
+  font-size: 2rem;
+  padding: 2rem;
+  border: solid 1px lime;
+  height: auto;
+}
+
+
+hr {
+  margin: 4rem 0;
+  border-color: rgba(150,150,150, 0.3)
+}
+
+/* @media (prefers-color-scheme: dark) {
+  hr {
+    border-color: 
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  hr {
+    border-color: 
+  }
+} */
+
+

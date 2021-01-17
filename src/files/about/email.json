@@ -1,0 +1,9 @@
+{
+  "name": "email@martinbanks.com.au",
+  "icon": "email",
+  "link": "mailto:email@martinbanks.com.au",
+  "color": "#aa0000",
+  "gradient": "radial-gradient(ellipse at bottom left, #66818C 40%, #81ADAE)",
+  "active": true,
+  "index": 900
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Icon-email@1.5x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icon-email" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke-opacity="0" stroke="#FFFFFF" fill-opacity="0" fill="#FFFFFF" x="0.5" y="0.5" width="99" height="99"></rect>
+        <g id="Icon-grid" stroke="#000000" stroke-opacity="0.0633468094">
+            <g id="icon-grid">
+                <rect id="boundry-copy-5" x="0.5" y="0.5" width="99" height="99"></rect>
+                <circle id="Oval" cx="50" cy="50" r="46"></circle>
+                <circle id="Oval" cx="50" cy="50" r="36"></circle>
+                <path d="M50,1 L50,99" id="Line-Copy-9"></path>
+                <path d="M11,1 L11,99" id="Line-Copy-10"></path>
+                <path d="M84,1 L84,99" id="Line-Copy-11"></path>
+                <path d="M16,1 L16,99" id="Line-Copy-12"></path>
+                <path d="M89,1 L89,99" id="Line-Copy-13"></path>
+                <path d="M100,50 L0,50" id="Line-2-Copy-8"></path>
+                <path d="M100,19 L0,19" id="Line-2-Copy-9"></path>
+                <path d="M100,88 L0,88" id="Line-2-Copy-11"></path>
+                <path d="M100,12 L0,12" id="Line-2-Copy-10"></path>
+                <path d="M100,81 L0,81" id="Line-2-Copy-12"></path>
+            </g>
+        </g>
+        <path d="M81.2,19 L89,19 L89,26.75 L89,73.25 L89,81 L81.2,81 L18.8,81 L11,81 L11,73 L11.0387903,27 L11,27 L11,19 L18.8,19 L81.2,19 Z M18.8,27 L18.8,34.5 L49.5125,53.875 L80.225,34.5 L80.225,26.75 L49.5125,46.125 L19,26.8761701 L19,27 L18.8,27 Z" id="Combined-Shape" fill="#000000"></path>
+    </g>
+</svg>

@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "title": "Project template",
+    "description": "-- Template for personal projects --",
+    "author": "Martin Banks. @anotherbanksy",
+    "siteUrl": "https://www.martinbanks.com.au"
+  },
+
+  "trackingId": "UA-158548765-1",
+
+  "pwaOptions": {
+    "name": "Martin Banks; Design & Development",
+    "short_name": "Martin Banks",
+    "lang": "en",
+    "start_url": "/",
+    "background_color": "#000000",
+    "theme_color": "#000",
+    "display": "standalone",
+    "icon": "src/files/images/martinbanks-icon.png"
+  }
+}
