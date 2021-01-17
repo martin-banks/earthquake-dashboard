@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 // import { Link } from "gatsby"
 import Styled from 'styled-components'
 
@@ -7,11 +7,11 @@ import SEO from "../components/seo"
 import Dashboard from '../components/dashboard'
 
 
-const IndexPage = () => (
-  <>
+const IndexPage = () => {
+  return (<>
     <SEO title="Home" />
     <Dashboard />
-  </>
-)
+  </>)
+}
 
 export default IndexPage

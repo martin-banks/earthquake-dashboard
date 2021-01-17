@@ -128,8 +128,10 @@ path {
 pre.dump {
   font-size: 2rem;
   padding: 2rem;
-  border: solid 1px lime;
+  margin: 0;
   height: auto;
+  background: rgba(0,100,0, 0.3);
+  overflow: hidden;
 }
 
 
