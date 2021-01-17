@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 
 import getQuakeData from '../functions/get-quake-data'
 
+import QuakeTotals from './quake-totals'
+import MagnitudeChart from './magnitude-chart'
+
 const Container = Styled.article`
   position: relative;
   display: grid;
@@ -60,25 +63,33 @@ const dateTo = `${yearTo}-${monthTo}-${dayTo}`
 
 
 
-
-
 const Dashboard = () => {
   const [ data, setData ] = useState(null)
+  const [ magnitudes, setMags ] = useState(null)
 
   useEffect(() => {
     getQuakeData({ dateFrom, dateTo })
       .then(response => {
         setData(response)
-        console.log({ response, data })
+        const allMags = {}
+        for (let mag of response.events) {
+          const cleanMag = Math.round(mag.properties.mag * 10) / 10
+          if (!allMags[ `mag-${cleanMag}` ]) {
+            allMags[ `mag-${cleanMag}`] = 0
+          }
+          allMags[`mag-${cleanMag}`] += 1
+        }
+        setMags(allMags)
       })
       .catch(err => console.error({ err }))
-
   }, [])
 
   return (
     <Container>
       <MainSection>
-        <SectionLeft />
+        <SectionLeft>
+          {/* editors */}
+        </SectionLeft>
           <div>
             <p>This space is a cutout for the globe behind</p>
             <pre className="dump">{ JSON.stringify({
@@ -89,10 +100,24 @@ const Dashboard = () => {
               events: data?.events?.length,
             }, null, 2) }</pre>
           </div>
-        <SectionRight />
+        <SectionRight>
+          {/* Totals */}
+          { data && <QuakeTotals
+            totals={{
+              total: data?.events?.length,
+              felt: data?.felt?.length,
+              tsunami: data?.tsunami?.length,
+            }}
+          />}
+          {/* magnitude chart */}
+          <MagnitudeChart mags={ magnitudes } />
+        </SectionRight>
       </MainSection>
 
-      <SectionBottom />
+      <SectionBottom>
+        {/* popup details */}
+        {/* timeline / scrubber */}
+      </SectionBottom>
     </Container>
   )
 }
