@@ -10,7 +10,6 @@ const Bar = Styled.div`
   height: 8px;
   background: rgba(255, ${p => p.index * 255}, 0, 1);
   margin-bottom: 1px;
-  /* width: ${p => p.width * 3}px; */
   width: ${p => p.width * 100}%;
   cursor: help;
 `
@@ -44,6 +43,7 @@ function MagnitudeChart (props) {
     // Split data into subests grouped to each quater dof magnitude -1 to 10
     // ! Because magnitudes aremeasured on a logarhytmic scale very minor quakes can result in negative numbers
     // https://www.usgs.gov/faqs/how-can-earthquake-have-a-negative-magnitude?qt-news_science_products=0#qt-news_science_products
+
     const allMags = {}
     const magValues = []
     for (let mag of events) {
@@ -67,27 +67,12 @@ function MagnitudeChart (props) {
 
     let minMag = Math.min(...magValues)
     let maxMag = Math.max(...magValues)
-
+    const magKeys = [...new Array(((maxMag + 0.1) * 10) - (minMag * 10))]
+    .map((_, i) => ((minMag * 10) + i) / 10)
+    storeMagnitudeKeys(magKeys)
 
     const chartValues = Object.keys(allMags).map(m => allMags[m])
-
-    const maxValue = Math.max(...chartValues)
-    const minValue = Math.min(...chartValues)
-
     storeChartRange({ min: Math.min(...chartValues), max: Math.max(...chartValues) })
-
-    console.log({ maxValue, minValue })
-
-    // console.log(magValues.sort((a, b) => {
-    //   if (a > b) return 1
-    //   if (a < b) return -1
-    //   return 0
-    // }), magValues.length)
-
-    const magKeys = [...new Array(((maxMag + 0.1) * 10) - (minMag * 10))]
-      .map((_, i) => ((minMag * 10) + i) / 10)
-
-    storeMagnitudeKeys(magKeys)
 
   }, [ events ])
 
@@ -103,10 +88,6 @@ function MagnitudeChart (props) {
   }
 
   return <>
-    {/* { (chartData && magnitudes) &&
-        magnitudes.map((m, i, arr) => <Bar width={ chartData[m] } index={ (arr.length - i) / arr.length } />)
-    } */}
-
     { popupInfo && <Popup>
         <h6>Magnitude: { popupInfo?.magnitude }</h6>
         <h4>Events: { popupInfo?.count }</h4>
@@ -118,7 +99,6 @@ function MagnitudeChart (props) {
           magnitudeKeys.map((m, i, arr) => {
             return <Bar
               key={ `chart-bar-${i}` }
-              // width={ chartData[`mag__${m}`] || 0 }
               width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
               index={ (arr.length - i) / arr.length }
               onMouseOver={ e => handleMouseOver(m) }
