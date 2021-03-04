@@ -34,7 +34,7 @@ const LayoutWrapper = Styled.div`
   min-height: 100vh;
   /* flex-direction: column; */
   position: relative;
-  padding-top: 20rem;
+  /* padding-top: 20rem; */
 `
 
 const Main = Styled.main`
@@ -58,11 +58,11 @@ const Layout = ({ children }) => {
 
   return (
     <Page>
-      <ThemeContext.Consumer>
+      {/* <ThemeContext.Consumer>
         { c => <BackgroundGrid theme={ c.theme } /> }
-      </ThemeContext.Consumer>
+      </ThemeContext.Consumer> */}
       <LayoutWrapper>
-        <Header />
+        {/* <Header /> */}
         <Main>{ children }</Main>
         <Footer />
       </LayoutWrapper>
