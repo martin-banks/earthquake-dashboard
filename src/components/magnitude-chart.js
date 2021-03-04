@@ -13,19 +13,17 @@ const Container = Styled.div`
 const BarWrapper = Styled.div`
   position: relative;
   display: block;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 16px;
+  padding-left: 8px;
   margin-left: 50px;
   border-left: solid 4px rgba(255,255,255, 0.5);
   height: 100%;
 `
 const Bar = Styled.div`
-  /* height: 8px; */
   position: relative;
   display: block;
   height: ${p => 100 / p.total}%;
   background: rgba(255, ${p => p.index * 255}, 0, 1);
-  /* margin-bottom: 1px; */
   width: ${p => p.width * 100}%;
   cursor: help;
   border-bottom: solid 1px black;
@@ -140,7 +138,6 @@ function MagnitudeChart (props) {
     { popupInfo && <Popup coords={ mouseCoords }>
           <h6>Magnitude: { popupInfo?.magnitude }</h6>
           <h4>Events: { popupInfo?.count }</h4>
-          <p>{ mouseCoords.x } / { mouseCoords.y }</p>
         </Popup>
       }
 
