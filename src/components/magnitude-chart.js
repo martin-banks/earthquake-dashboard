@@ -2,20 +2,43 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Styled from 'styled-components'
 
+import mousePositionHook from '../hooks/mouse-position-hook'
 
+
+const Container = Styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+`
 const BarWrapper = Styled.div`
+  position: relative;
+  display: block;
   padding-right: 10px;
+  padding-left: 10px;
+  margin-left: 50px;
+  border-left: solid 4px rgba(255,255,255, 0.5);
+  height: 100%;
 `
 const Bar = Styled.div`
-  height: 8px;
+  /* height: 8px; */
+  position: relative;
+  display: block;
+  height: ${p => 100 / p.total}%;
   background: rgba(255, ${p => p.index * 255}, 0, 1);
-  margin-bottom: 1px;
+  /* margin-bottom: 1px; */
   width: ${p => p.width * 100}%;
   cursor: help;
+  border-bottom: solid 1px black;
+  &:hover {
+    background: steelblue;
+  }
 `
 
 const Popup = Styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(${p => p.coords.x}px, ${p => p.coords.y}px, 0);
   padding: 16px;
   border-radius: 4px;
   background: rgba(0,0,0, 0.8);
@@ -24,6 +47,7 @@ const Popup = Styled.div`
     color: white;
     margin: 0;
   }
+  pointer-events: none;
 `
 
 
@@ -36,6 +60,9 @@ function MagnitudeChart (props) {
   const [ chartRange, storeChartRange ] = useState(null)
 
   const [ popupInfo, updatePopupInfo ] = useState(null)
+
+  const mouseCoords = mousePositionHook()
+
 
 
   useEffect(() => {
@@ -77,7 +104,7 @@ function MagnitudeChart (props) {
   }, [ events ])
 
 
-  const handleMouseOver = magKey => {
+  const handleMouseOver = (magKey, e) => {
     updatePopupInfo(prev => ({
       magnitude: magKey,
       count: chartData?.[`mag__${magKey}`]
@@ -87,34 +114,40 @@ function MagnitudeChart (props) {
     updatePopupInfo(null)
   }
 
-  return <>
-    { popupInfo && <Popup>
-        <h6>Magnitude: { popupInfo?.magnitude }</h6>
-        <h4>Events: { popupInfo?.count }</h4>
-      </Popup>
-    }
+  return <Container>
+    <div>
+      <h3>Magnitudes</h3>
+      <p><i>Quake magnitudes can be negative numbers due to the way they are calculated and are typically very minor. <a href="https://www.usgs.gov/faqs/how-can-earthquake-have-a-negative-magnitude?qt-news_science_products=0#qt-news_science_products">Visit the USGS to learn more.</a></i></p>
+    </div>
 
-    <BarWrapper>
-      { (chartData && magnitudes) &&
-          magnitudeKeys.map((m, i, arr) => {
-            return <Bar
-              key={ `chart-bar-${i}` }
-              width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
-              index={ (arr.length - i) / arr.length }
-              onMouseOver={ e => handleMouseOver(m) }
-              onMouseOut={ e => handleMouseOut(m) }
-            />
 
-          })
+    {/* <div> */}
+      <BarWrapper>
+        { (chartData && magnitudes) &&
+            magnitudeKeys.map((m, i, arr) => <Bar
+            key={ `chart-bar-${i}` }
+            width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
+            total={ arr.length }
+            index={ (arr.length - i) / arr.length }
+            onMouseOver={ e => handleMouseOver(m, e) }
+            onMouseOut={ e => handleMouseOut(m, e) }
+            />)
+        }
+      </BarWrapper>
+    {/* </div> */}
+
+
+    { popupInfo && <Popup coords={ mouseCoords }>
+          <h6>Magnitude: { popupInfo?.magnitude }</h6>
+          <h4>Events: { popupInfo?.count }</h4>
+          <p>{ mouseCoords.x } / { mouseCoords.y }</p>
+        </Popup>
       }
-    </BarWrapper>
-
-
 
     {/* { magnitudes &&
       <pre className="dump">{ JSON.stringify(magnitudes, null, 2) }</pre>
     } */}
-  </>
+  </Container>
 }
 
 
