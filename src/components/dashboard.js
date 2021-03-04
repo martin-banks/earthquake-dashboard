@@ -8,13 +8,13 @@ import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 
 const Container = Styled.article`
-  position: relative;
+  /* position: relative; */
   display: grid;
   grid-template-rows: auto 200px;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 90vh;
+  /* top: 0; */
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
+  height: 100vh;
   z-index: 100;
   outline: solid 1px lime;
   margin: 0;
@@ -33,6 +33,8 @@ const SectionLeft = Styled.section`
 `
 const SectionRight = Styled.section`
   ${ sharedStyles };
+  display: grid;
+  grid-template-rows: auto 1fr;
 `
 const SectionBottom = Styled.section`
   outline: solid 2px cyan;
@@ -80,19 +82,22 @@ const Dashboard = () => {
   return (
     <Container>
       <MainSection>
+
         <SectionLeft>
           {/* editors */}
         </SectionLeft>
-          <div>
-            <p>This space is a cutout for the globe behind</p>
-            <pre className="dump">{ JSON.stringify({
-              keys: data && Object.keys(data),
-              dates: data?.dateRange,
-              felt: data?.felt?.length,
-              tsunami: data?.tsunami?.length,
-              events: data?.events?.length,
-            }, null, 2) }</pre>
-          </div>
+
+        <div>
+          <p>This space is a cutout for the globe behind</p>
+          <pre className="dump">{ JSON.stringify({
+            keys: data && Object.keys(data),
+            dates: data?.dateRange,
+            felt: data?.felt?.length,
+            tsunami: data?.tsunami?.length,
+            events: data?.events?.length,
+          }, null, 2) }</pre>
+        </div>
+
         <SectionRight>
           {/* Totals */}
           { data && <QuakeTotals
@@ -105,12 +110,14 @@ const Dashboard = () => {
           {/* magnitude chart */}
           <MagnitudeChart events={ events } />
         </SectionRight>
+
       </MainSection>
 
       <SectionBottom>
         {/* popup details */}
         {/* timeline / scrubber */}
       </SectionBottom>
+
     </Container>
   )
 }
