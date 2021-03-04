@@ -131,7 +131,7 @@ pre.dump {
   margin: 0;
   height: auto;
   background: rgba(0,100,0, 0.3);
-  overflow: hidden;
+  overflow: auto;
 }
 
 
