@@ -66,20 +66,13 @@ const dateTo = `${yearTo}-${monthTo}-${dayTo}`
 const Dashboard = () => {
   const [ data, setData ] = useState(null)
   const [ magnitudes, setMags ] = useState(null)
+  const [ events, storeEvents ] = useState(null)
 
   useEffect(() => {
     getQuakeData({ dateFrom, dateTo })
       .then(response => {
         setData(response)
-        const allMags = {}
-        for (let mag of response.events) {
-          const cleanMag = Math.round(mag.properties.mag * 10) / 10
-          if (!allMags[ `mag-${cleanMag}` ]) {
-            allMags[ `mag-${cleanMag}`] = 0
-          }
-          allMags[`mag-${cleanMag}`] += 1
-        }
-        setMags(allMags)
+        storeEvents(response.events)
       })
       .catch(err => console.error({ err }))
   }, [])
@@ -110,7 +103,7 @@ const Dashboard = () => {
             }}
           />}
           {/* magnitude chart */}
-          <MagnitudeChart mags={ magnitudes } />
+          <MagnitudeChart events={ events } />
         </SectionRight>
       </MainSection>
 
