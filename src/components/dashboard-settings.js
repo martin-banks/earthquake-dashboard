@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Styled from 'styled-components'
 
 import DropdownMenu from './dropdown-menu'
+import MagnitudeRange from './magnitude-range'
 
 const Wrapper = Styled.section`
   min-width: 200px;
@@ -75,12 +76,15 @@ function DashboardSettings (props) {
   const dateRangePresets = [
     {
       label: 'Last 24 hours',
+      value: 1,
     },
     {
       label: 'Last 7 days',
+      value: 7,
     },
     {
       label: 'Last 4 weeks',
+      value: 28,
     },
   ]
 
@@ -90,12 +94,15 @@ function DashboardSettings (props) {
     setShowType(index)
   }
 
+  const handleDateRangeUpdate = val => {
+    console.log(val)
+  }
+
   return <Wrapper>
 
     <Section>
       <h3>Theme</h3>
     </Section>
-
 
     <Section>
       <h3>Date range</h3>
@@ -104,8 +111,14 @@ function DashboardSettings (props) {
         label="Default presets"
         options={ dateRangePresets }
         initialActive={ 1 }
-        handleUpdate={ console.log }
+        handleUpdate={ handleDateRangeUpdate }
       />
+    </Section>
+
+    <Section>
+      {/* min and max magnitude */}
+      <h3>Magnitude range</h3>
+      <MagnitudeRange />
     </Section>
 
 
