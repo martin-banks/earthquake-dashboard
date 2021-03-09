@@ -6,14 +6,11 @@ import getQuakeData from '../functions/get-quake-data'
 
 import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
+import DashboardSettings from './dashboard-settings'
 
 const Container = Styled.article`
-  /* position: relative; */
   display: grid;
   grid-template-rows: auto 200px;
-  /* top: 0; */
-  /* left: 50%; */
-  /* transform: translateX(-50%); */
   height: 100vh;
   z-index: 100;
   outline: solid 1px lime;
@@ -68,13 +65,13 @@ const dateTo = `${yearTo}-${monthTo}-${dayTo}`
 const Dashboard = () => {
   const [ data, setData ] = useState(null)
   const [ magnitudes, setMags ] = useState(null)
-  const [ events, storeEvents ] = useState(null)
+  // const [ events, storeEvents ] = useState(null)
 
   useEffect(() => {
     getQuakeData({ dateFrom, dateTo })
       .then(response => {
         setData(response)
-        storeEvents(response.events)
+        // storeEvents(response.events)
       })
       .catch(err => console.error({ err }))
   }, [])
@@ -84,7 +81,7 @@ const Dashboard = () => {
       <MainSection>
 
         <SectionLeft>
-          {/* editors */}
+          <DashboardSettings />
         </SectionLeft>
 
         <div>
@@ -108,7 +105,7 @@ const Dashboard = () => {
             }}
           />}
           {/* magnitude chart */}
-          <MagnitudeChart events={ events } />
+          { data && <MagnitudeChart events={ data.events } /> }
         </SectionRight>
 
       </MainSection>
