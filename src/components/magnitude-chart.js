@@ -13,23 +13,35 @@ const Container = Styled.div`
 const BarWrapper = Styled.div`
   position: relative;
   display: block;
-  padding-right: 16px;
+  padding-right: 30px;
   padding-left: 8px;
-  margin-left: 50px;
-  border-left: solid 4px rgba(255,255,255, 0.5);
+  margin-left: 30px;
+  border-left: solid 1px rgba(255,255,255, 0.5);
   height: 100%;
 `
 const Bar = Styled.div`
   position: relative;
   display: block;
   height: ${p => 100 / p.total}%;
-  background: rgba(255, ${p => p.index * 255}, 0, 1);
+  background: rgba(255, ${p => p.index * 200}, 0, 1);
   width: ${p => p.width * 100}%;
   cursor: help;
   border-bottom: solid 1px black;
   &:hover {
     background: steelblue;
   }
+`
+const Value = Styled.span`
+  position: absolute;
+  left: 100%;
+  transform: translateX(4px);
+  opacity: 0.6;
+`
+const MagnitudeKey = Styled.span`
+  position: absolute;
+  left: 0;
+  transform: translateX(calc(-100% - 16px));
+  opacity: 0.6;
 `
 
 const Popup = Styled.div`
@@ -123,13 +135,16 @@ function MagnitudeChart (props) {
       <BarWrapper>
         { (chartData && magnitudes) &&
             magnitudeKeys.map((m, i, arr) => <Bar
-            key={ `chart-bar-${i}` }
-            width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
-            total={ arr.length }
-            index={ (arr.length - i) / arr.length }
-            onMouseOver={ e => handleMouseOver(m, e) }
-            onMouseOut={ e => handleMouseOut(m, e) }
-            />)
+              key={ `chart-bar-${i}` }
+              width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
+              total={ arr.length }
+              index={ (arr.length - i) / arr.length }
+              onMouseOver={ e => handleMouseOver(m, e) }
+              onMouseOut={ e => handleMouseOut(m, e) }
+            >
+              <Value>{ chartData[`mag__${m}`] }</Value>
+              <MagnitudeKey>{ `${m.toFixed(1)}` }</MagnitudeKey>
+            </Bar>)
         }
       </BarWrapper>
     {/* </div> */}
