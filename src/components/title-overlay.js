@@ -74,7 +74,10 @@ const Circle = Styled.circle`
 
 
 function TitleOverlay (props) {
-  const { loading } = props
+  const {
+    loading,
+    error,
+  } = props
 
   return <Container>
     <div>
@@ -93,6 +96,16 @@ function TitleOverlay (props) {
           </Svg>
         </div>
       }
+
+      {
+        error &&
+          <pre>
+            <code>
+              { error }
+            </code>
+          </pre>
+      }
+
     </div>
   </Container>
 }

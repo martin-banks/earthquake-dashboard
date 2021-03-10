@@ -35,6 +35,7 @@ const dateTo = `${yearTo}-${monthTo}-${dayTo}`
 const IndexPage = () => {
   const [ data, setData ] = useState(null)
   const [ loading, setIsLoading ] = useState(true)
+  const [ error, storeError ] = useState(null)
 
   useEffect(() => {
     getQuakeData({ dateFrom, dateTo })
@@ -42,14 +43,17 @@ const IndexPage = () => {
         setData(response)
         setIsLoading(false)
       })
-      .catch(err => console.error({ err }))
+      .catch(err => {
+        console.error('-- ERROR FETCHING DATA --\n', { err })
+        storeError(JSON.stringify(['-- ERROR FETCHING DATA --', { err }], null, 2))
+      })
   }, [])
 
 
   return (<>
     <SEO title="Home" />
     <Dashboard data={ data } />
-    { loading && <TitleOverlay loading={ loading } /> }
+    { loading && <TitleOverlay loading={ loading } error={ error } /> }
   </>)
 }
 
