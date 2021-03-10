@@ -35,7 +35,10 @@ const Option = Styled.li`
   transform: translateY(${p => p.index * 100}%);
   box-sizing: border-box;
   cursor: pointer;
-  background: ${p => p.active && p.selected ? '#333' : p.active ? 'black' : 'none'};
+  background: ${p => p.active && p.selected ? '#ddd' : p.active ? 'white' : 'none'};
+  @media screen and (prefers-color-scheme: dark) {
+    background: ${p => p.active && p.selected ? '#333' : p.active ? 'black' : 'none'};
+  }
   transition: all 200ms;
   &:hover {
     background: ${p => p.active && 'slategrey'};

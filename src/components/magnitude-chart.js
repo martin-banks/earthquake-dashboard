@@ -26,7 +26,10 @@ const Bar = Styled.div`
   background: rgba(255, ${p => p.index * 200}, 0, 1);
   width: ${p => p.width * 100}%;
   cursor: help;
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px white;
+  @media screen and (prefers-color-scheme: dark) {
+    border-bottom: solid 1px black
+  }
   &:hover {
     background: steelblue;
   }
