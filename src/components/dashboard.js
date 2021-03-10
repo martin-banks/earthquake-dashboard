@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import Styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import getQuakeData from '../functions/get-quake-data'
 
 import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
@@ -16,7 +15,6 @@ const Container = Styled.article`
   outline: solid 1px lime;
   margin: 0;
 `
-
 const sharedStyles = css`
   outline: solid 2px pink;
 `
@@ -40,41 +38,12 @@ const SectionBottom = Styled.section`
 
 
 
-// ! Hardcoded to the previous 7 days for now
-const days = 7
-const today = new Date(new Date().setHours(0,0,0,0)) // midnight today
-const firstDay = new Date(new Date().setDate(today.getDate() - days))
 
-console.log({ firstDay, today })
+const Dashboard = props => {
+  const { data } = props
 
-const monthFrom = `0${firstDay.getMonth() + 1}`.slice(-2)
-const dayFrom = `0${firstDay.getDate()}`.slice(-2)
-const yearFrom = firstDay.getFullYear()
-
-const monthTo = `0${today.getMonth() + 1}`.slice(-2)
-const dayTo = `0${today.getDate()}`.slice(-2)
-const yearTo = today.getFullYear()
-
-const dateFrom = `${yearFrom}-${monthFrom}-${dayFrom}`
-const dateTo = `${yearTo}-${monthTo}-${dayTo}`
-
-
-
-
-
-const Dashboard = () => {
-  const [ data, setData ] = useState(null)
-  const [ magnitudes, setMags ] = useState(null)
+  // const [ magnitudes, setMags ] = useState(null)
   // const [ events, storeEvents ] = useState(null)
-
-  useEffect(() => {
-    getQuakeData({ dateFrom, dateTo })
-      .then(response => {
-        setData(response)
-        // storeEvents(response.events)
-      })
-      .catch(err => console.error({ err }))
-  }, [])
 
   return (
     <Container>
