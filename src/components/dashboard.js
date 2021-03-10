@@ -39,42 +39,73 @@ const SectionBottom = Styled.section`
 
 
 
-const Dashboard = props => {
+function Dashboard (props) {
   const { data } = props
 
+  const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10})
+  const [ eventsToRender, updateEventsToRender ] = useState(null)
   // const [ magnitudes, setMags ] = useState(null)
   // const [ events, storeEvents ] = useState(null)
+
+  const [ totals, updateTotals ] = useState({ total: 0, felt: 0, tsunami: 0, })
+
+  useEffect(() => {
+    if (!data) return
+
+    const filteredByRange = data.events.filter(e => {
+      return (e.properties.mag >= magnitudeRange.min) && (e.properties.mag <= magnitudeRange.max)
+    })
+    updateEventsToRender(filteredByRange)
+
+    const felt = filteredByRange.filter(f => f.properties.felt)
+    const tsunami = filteredByRange.filter(f => f.properties.tsunami)
+
+    updateTotals({
+      felt: felt.length,
+      tsunami: tsunami.length,
+      total: filteredByRange.length
+    })
+
+  }, [ data, magnitudeRange ])
+
+
 
   return (
     <Container>
       <MainSection>
 
         <SectionLeft>
-          <DashboardSettings />
+          <DashboardSettings
+            magnitudeRange={ magnitudeRange }
+            updateMagnitudeRange={ updateMagnitudeRange }
+          />
         </SectionLeft>
 
         <div>
           <p>This space is a cutout for the globe behind</p>
-          <pre className="dump">{ JSON.stringify({
-            keys: data && Object.keys(data),
-            dates: data?.dateRange,
-            felt: data?.felt?.length,
-            tsunami: data?.tsunami?.length,
-            events: data?.events?.length,
-          }, null, 2) }</pre>
+          <pre className="dump">
+            {
+              JSON.stringify({
+                keys: data && Object.keys(data),
+                dates: data?.dateRange,
+                felt: data?.felt?.length,
+                tsunami: data?.tsunami?.length,
+                events: data?.events?.length,
+                magnitudeRange,
+              }, null, 2)
+            }
+          </pre>
         </div>
 
         <SectionRight>
           {/* Totals */}
           { data && <QuakeTotals
-            totals={{
-              total: data?.events?.length,
-              felt: data?.felt?.length,
-              tsunami: data?.tsunami?.length,
-            }}
+            totals={ totals }
           />}
           {/* magnitude chart */}
-          { data && <MagnitudeChart events={ data.events } /> }
+          { data &&
+            <MagnitudeChart events={ eventsToRender } />
+          }
         </SectionRight>
 
       </MainSection>
