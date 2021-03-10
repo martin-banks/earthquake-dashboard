@@ -125,6 +125,9 @@ path {
   transition: fill 200ms;
 }
 
+pre code {
+  font-size: 2rem;
+}
 pre.dump {
   font-size: 2rem;
   padding: 2rem;
