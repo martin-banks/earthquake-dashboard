@@ -50,9 +50,7 @@ body {
   }
 }
 
-article {
-  /* opacity: 0; */
-}
+
 
 h1 {
   font-size: 7rem;
@@ -155,4 +153,119 @@ hr {
   }
 } */
 
+
+.input-range {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.input-range__slider {
+  appearance: none;
+  background: orangered;
+  border: 2px solid orangered;
+  border-radius: 100%;
+  cursor: pointer;
+  display: block;
+  height: 2.5rem;
+  margin-left: -1.8rem;
+  margin-top: -1.8rem;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  width: 2.5rem;
+}
+
+/* @media screen and (prefers-color-scheme: dark) {
+  .input-range__slider {
+    background: orangered;
+    border: solid 2px darkred;
+  }
+} */
+
+.input-range__slider:active {
+  transform: scale(1.5);
+}
+
+.input-range__slider:focus {
+  box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2);
+}
+
+.input-range--disabled .input-range__slider {
+  background: red;
+  border: 1px solid #cccccc;
+  box-shadow: none;
+  transform: none;
+}
+
+.input-range__slider-container {
+  transition: left 0.3s ease-out;
+}
+
+.input-range__label {
+  color: #aaaaaa;
+  font-family: "Helvetica Neue", san-serif;
+  font-size: 2rem;
+  transform: translateZ(0);
+  white-space: nowrap;
+}
+
+.input-range__label--min,
+.input-range__label--max {
+  bottom: -4rem;
+  position: absolute;
+}
+
+.input-range__label--min {
+  left: 0;
+}
+
+.input-range__label--max {
+  right: 0;
+}
+
+.input-range__label--value {
+  position: absolute;
+  top: -4rem;
+}
+
+.input-range__label-container {
+  left: -50%;
+  position: relative;
+}
+  .input-range__label--max .input-range__label-container {
+    left: 50%;
+  }
+
+.input-range__track {
+  background: #888;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  display: block;
+  height: 1rem;
+  position: relative;
+  transition: left 0.3s ease-out, width 0.3s ease-out;
+}
+
+.input-range--disabled .input-range__track {
+  background: #eeeeee;
+}
+
+.input-range__track--background {
+  left: 0;
+  /* margin-top: -2rem; */
+  /* position: absolute; */
+  right: 0;
+  /* top: 50%; */
+}
+
+.input-range__track--active {
+  background: orangered;
+}
+
+.input-range {
+  height: 1rem;
+  position: relative;
+  width: 100%;
+}
 
