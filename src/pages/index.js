@@ -16,8 +16,6 @@ const days = 7
 const today = new Date(new Date().setHours(0,0,0,0)) // midnight today
 const firstDay = new Date(new Date().setDate(today.getDate() - days))
 
-console.log({ firstDay, today })
-
 const monthFrom = `0${firstDay.getMonth() + 1}`.slice(-2)
 const dayFrom = `0${firstDay.getDate()}`.slice(-2)
 const yearFrom = firstDay.getFullYear()
@@ -31,8 +29,7 @@ const dateTo = `${yearTo}-${monthTo}-${dayTo}`
 
 
 
-
-const IndexPage = () => {
+function IndexPage () {
   const [ data, setData ] = useState(null)
   const [ loading, setIsLoading ] = useState(true)
   const [ error, storeError ] = useState(null)
