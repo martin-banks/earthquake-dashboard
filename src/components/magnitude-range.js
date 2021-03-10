@@ -10,7 +10,7 @@ const Track = Styled.div`
   position: relative;
   height: 8px;
   border-radius: 100px;
-  background: purple;
+  background: rgba(150, 150, 150, 0.5);
   box-sizing: border-box;
   margin-bottom: 4rem;
 `
@@ -23,7 +23,10 @@ const Handle = Styled.span`
   width: 20px;
   height: 20px;
   border-radius: 100px;
-  background: white;
+  background: black;
+  @media screen and (prefers-color-scheme: dark) {
+    background: white;
+  }
 `
 
 
@@ -45,16 +48,16 @@ function MagnitudeRange (props) {
     <h5>Minimum</h5>
     <Container>
       <Track
-        onMousemove={ () => {} }
-        onMouseup={ () => {} }
-        onMouseout={ () => {} }
-        onMouseleave={ () => {} }
+        onMouseMove={ () => {} }
+        onMouseUp={ () => {} }
+        onMouseOut={ () => {} }
+        onMouseLeave={ () => {} }
       >
         <Handle
           key="magnitude-range-min"
           value={ min }
-          onMousedown={ () => {} }
-          onMouseup={ () => {} }
+          onMouseDown={ () => {} }
+          onMouseUp={ () => {} }
           position={ min }
         />
       </Track>
@@ -63,16 +66,16 @@ function MagnitudeRange (props) {
     <h5>Maximum</h5>
     <Container>
       <Track
-        onMousemove={ () => {} }
-        onMouseup={ () => {} }
-        onMouseout={ () => {} }
-        onMouseleave={ () => {} }
+        onMouseMove={ () => {} }
+        onMouseUp={ () => {} }
+        onMouseOut={ () => {} }
+        onMouseLeave={ () => {} }
       >
         <Handle
           key="magnitude-range-max"
           value={ max }
-          onMousedown={ () => {} }
-          onMouseup={ () => {} }
+          onMouseDown={ () => {} }
+          onMouseUp={ () => {} }
           position={ max }
         />
       </Track>
