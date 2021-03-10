@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import Styled from 'styled-components'
+import InputRange from 'react-input-range'
 
+// import 'react-input-range/lib/css/index.css'
 
 
 const Container = Styled.div`
-  padding: 0 1rem;
+  margin-bottom: 4rem;
+  background: seagreen;
+`
+const Form = Styled.form`
+  padding: 100px 0;
 `
 const Track = Styled.div`
   position: relative;
@@ -31,22 +37,58 @@ const Handle = Styled.span`
 
 
 function MagnitudeRange (props) {
-  const { range } = props
+  const { range, updateRange } = props
 
   const [ min, updateMin ] = useState(0)
-  const [ max, updateMax ] = useState(1)
+  const [ max, updateMax ] = useState(10)
 
   useEffect(() => {
-    if (!range) return
-    updateMin(range.min)
-    updateMax(range.max)
+    // if (!range) return
+    // updateMin(range.min)
+    // updateMax(range.max)
   }, [ range ])
 
 
+  // const handleUpdate = x => {
+  //   const { value, type } = x
+  //   updateRange
+  // }
 
-  return <div>
-    <h5>Minimum</h5>
-    <Container>
+  return <Container>
+
+    <Form>
+      <InputRange
+        draggableTrack
+        minValue="0"
+        maxValue="10"
+        value={{ min, max }}
+        // value="5"
+        step="0.1"
+        // onChange={ x => {
+        //   updateMin(x.min)
+        //   updateMax(x.max)
+        // }}
+        onChangeComplete={ x => {
+          updateMin(x.min)
+          updateMax(x.max)
+        }}
+      />
+
+    </Form>
+
+
+    {/* <Container>
+      <h5>Minimum</h5>
+      <input
+        type="range"
+        step="0.1"
+        min={ min }
+        max={ max }
+        value={ min }
+        onChange={ e => updateRange({ value: e.target.value, type: 'min' })}
+      />
+    </Container> */}
+    {/* <Container>
       <Track
         onMouseMove={ () => {} }
         onMouseUp={ () => {} }
@@ -61,10 +103,20 @@ function MagnitudeRange (props) {
           position={ min }
         />
       </Track>
-    </Container>
+    </Container> */}
 
-    <h5>Maximum</h5>
-    <Container>
+    {/* <Container>
+      <h5>Maximum</h5>
+      <input
+        type="range"
+        step="0.1"
+        min={ min }
+        max={ max }
+        value={ max }
+        onChange={ e => updateRange({ value: e.target.value, type: 'max' })}
+      />
+    </Container> */}
+    {/* <Container>
       <Track
         onMouseMove={ () => {} }
         onMouseUp={ () => {} }
@@ -79,8 +131,8 @@ function MagnitudeRange (props) {
           position={ max }
         />
       </Track>
-    </Container>
-  </div>
+    </Container> */}
+  </Container>
 }
 
 
