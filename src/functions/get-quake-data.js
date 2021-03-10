@@ -10,13 +10,8 @@ function quakeData ({ dateFrom, dateTo }) {
     fetch(endpoint)
       .then(res => res.json())
       .then(data => {
-
-        console.log('number of quakes', data.features.length)
-
         const felt = data.features.filter(f => f.properties.felt)
         const tsunami = data.features.filter(f => f.properties.tsunami)
-
-        console.log({ felt, tsunami })
 
         const dates = data.features.map(f => f.properties.time)
         const from = Math.min(...dates)
