@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Styled from 'styled-components'
+import InputRange from 'react-input-range'
+
+// import 'react-input-range/lib/css/index.css'
 
 import DropdownMenu from './dropdown-menu'
-import MagnitudeRange from './magnitude-range'
+// import MagnitudeRange from './magnitude-range'
 
 const Wrapper = Styled.section`
   min-width: 200px;
@@ -63,7 +66,11 @@ const QuakeTypeLabel = Styled.p`
 
 
 function DashboardSettings (props) {
+  const { magnitudeRange, updateMagnitudeRange } = props
+
   const [ showType, setShowType ] = useState(0)
+  const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
+  // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10 })
 
   const quakeTypes = [
     'All',
@@ -95,6 +102,15 @@ function DashboardSettings (props) {
     console.log(val)
   }
 
+  useEffect(() => {
+    updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+  }, [])
+
+  // const updateMagnitudeRange = x => {
+  //   const { value, type } = x
+  //   console.log({ value, type })
+  // }
+
   return <Wrapper>
 
     {/* <Section>
@@ -115,7 +131,21 @@ function DashboardSettings (props) {
     <Section>
       {/* min and max magnitude */}
       <h3>Magnitude range</h3>
-      <MagnitudeRange />
+      <InputRange
+        draggableTrack
+        min={ rangeToUse.min }
+        max={ rangeToUse.max }
+        step={ 0.1 }
+        value={{ min: rangeToUse.min, max: rangeToUse.max }}
+        formatLabel={ value => value.toFixed(1)}
+        onChange={ x => {
+          updateRangeToUse({ min: x.min, max: x.max})
+        }}
+        onChangeComplete={ x => {
+          updateMagnitudeRange({ min: x.min.toFixed(1), max: x.max.toFixed(1) })
+        }}
+      />
+      {/* <MagnitudeRange updateRange={ updateMagnitudeRange } /> */}
     </Section>
 
 
