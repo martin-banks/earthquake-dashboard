@@ -67,11 +67,11 @@ const Popup = Styled.div`
 
 function MagnitudeChart (props) {
   const { events } = props
+
   const [ magnitudes, storeMagnitudes ] = useState(null)
   const [ magnitudeKeys, storeMagnitudeKeys ] = useState([])
   const [ chartData, storeChartData ] = useState([])
   const [ chartRange, storeChartRange ] = useState(null)
-
   const [ popupInfo, updatePopupInfo ] = useState(null)
 
   const mouseCoords = mousePositionHook()
@@ -80,12 +80,14 @@ function MagnitudeChart (props) {
 
   useEffect(() => {
     if (!events) return
+    // console.log({ events })
     // Split data into subests grouped to each quater dof magnitude -1 to 10
     // ! Because magnitudes aremeasured on a logarhytmic scale very minor quakes can result in negative numbers
     // https://www.usgs.gov/faqs/how-can-earthquake-have-a-negative-magnitude?qt-news_science_products=0#qt-news_science_products
 
     const allMags = {}
     const magValues = []
+
     for (let mag of events) {
       const cleanMag = Math.round(mag.properties.mag * 10) / 10
       if (!allMags[ `mag__${cleanMag}` ]) {
@@ -94,6 +96,7 @@ function MagnitudeChart (props) {
       }
       allMags[`mag__${cleanMag}`] += 1
     }
+
     const sortedMags = Object.keys(allMags).sort((a, b) => {
       const aMag = parseFloat(a.replace('mag__', ''))
       const bMag = parseFloat(b.replace('mag__', ''))
@@ -102,13 +105,20 @@ function MagnitudeChart (props) {
       if (aMag < bMag) return -1
       return 0
     })
+
     storeChartData(allMags)
     storeMagnitudes(sortedMags)
 
+    // let minMag = magnitudeRange?.min
     let minMag = Math.min(...magValues)
+    // let maxMag = magnitudeRange?.max
     let maxMag = Math.max(...magValues)
-    const magKeys = [...new Array(((maxMag + 0.1) * 10) - (minMag * 10))]
-    .map((_, i) => ((minMag * 10) + i) / 10)
+
+    // console.log(maxMag, minMag, ((maxMag + 0.1) * 10) - (minMag * 10))
+
+    const magKeys = [...new Array(Math.ceil((maxMag + 0.1) * 10) - (minMag * 10))]
+      .map((_, i) => ((minMag * 10) + i) / 10)
+
     storeMagnitudeKeys(magKeys)
 
     const chartValues = Object.keys(allMags).map(m => allMags[m])
@@ -154,10 +164,10 @@ function MagnitudeChart (props) {
 
 
     { popupInfo && <Popup coords={ mouseCoords }>
-          <h6>Magnitude: { popupInfo?.magnitude }</h6>
-          <h4>Events: { popupInfo?.count }</h4>
-        </Popup>
-      }
+        <h6>Magnitude: { popupInfo?.magnitude }</h6>
+        <h4>Events: { popupInfo?.count }</h4>
+      </Popup>
+    }
 
     {/* { magnitudes &&
       <pre className="dump">{ JSON.stringify(magnitudes, null, 2) }</pre>
