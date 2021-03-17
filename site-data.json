@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "Project template",
-    "description": "-- Template for personal projects --",
+    "title": "Earthquake dashboard",
+    "description": "Dashboard to display every recorded around the world with controls to filter by magnitude, date and type.",
     "author": "Martin Banks. @anotherbanksy",
     "siteUrl": "https://www.martinbanks.com.au"
   },
