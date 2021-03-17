@@ -34,12 +34,12 @@ const Value = Styled.p`
 
 
 const QuakeTotals = props => {
-  const { total, tsunami, felt } = props.totals
+  const { all, tsunami, felt } = props.totals
 
   return <Container>
     <StatFull>
       <Kicker>Total quakes</Kicker>
-      <Value>{ total }</Value>
+      <Value>{ all }</Value>
 
     </StatFull>
 
