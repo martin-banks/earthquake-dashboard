@@ -37,36 +37,81 @@ const SectionBottom = Styled.section`
 
 
 
-
+const quakeTypes = [
+  {
+    label: 'All quakes',
+    type: 'all'
+  },
+  {
+    label: 'Quakes felt',
+    type: 'felt'
+  },
+  {
+    label: 'Tsunami warnings',
+    type: 'tsunami'
+  },
+]
 
 function Dashboard (props) {
   const { data } = props
 
-  const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10})
+  // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10})
+  const [ magnitudeRange, updateMagnitudeRange ] = useState(null)
   const [ eventsToRender, updateEventsToRender ] = useState(null)
+  // const [ feltEvents, updateFeltEvents ] = useState(null)
+  // const [ tsunamiEvents, updateTsunamiEvents ] = useState(null)
+  // const [ allEvents, updateAllEvents ] = useState(null)
   // const [ magnitudes, setMags ] = useState(null)
   // const [ events, storeEvents ] = useState(null)
+  const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
 
-  const [ totals, updateTotals ] = useState({ total: 0, felt: 0, tsunami: 0, })
+  const [ eventsByType, updateEventsByType ] = useState({ all: 0, tsunami: 0, felt: 0 })
+
+  const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
+
 
   useEffect(() => {
     if (!data) return
+    const magnitudes = []
+    for (let event of data.events) {
+      magnitudes.push(Math.round(event.properties.mag * 10) / 10)
+    }
+    const min = Math.min(...magnitudes)
+    const max = Math.max(...magnitudes)
+
+    console.log('range to use\n', { min, max })
+    updateMagnitudeRange({ min, max })
+  }, [data])
+
+  useEffect(() => {
+    if (!data || !magnitudeRange) return
+
+    // updateTypeToShow(quakeTypes[0])
 
     const filteredByRange = data.events.filter(e => {
       return (e.properties.mag >= magnitudeRange.min) && (e.properties.mag <= magnitudeRange.max)
     })
-    updateEventsToRender(filteredByRange)
 
     const felt = filteredByRange.filter(f => f.properties.felt)
     const tsunami = filteredByRange.filter(f => f.properties.tsunami)
 
+    const updatedData = {
+      all: filteredByRange,
+      felt,
+      tsunami,
+    }
+
+    updateEventsByType(updatedData)
+
     updateTotals({
       felt: felt.length,
       tsunami: tsunami.length,
-      total: filteredByRange.length
+      all: filteredByRange.length
     })
 
-  }, [ data, magnitudeRange ])
+    updateEventsToRender(updatedData[typeToShow.type])
+
+  }, [ data, magnitudeRange, typeToShow ])
 
 
 
@@ -74,11 +119,15 @@ function Dashboard (props) {
     <Container>
       <MainSection>
 
-        <SectionLeft>
-          <DashboardSettings
-            magnitudeRange={ magnitudeRange }
-            updateMagnitudeRange={ updateMagnitudeRange }
-          />
+        <SectionLeft>{
+            magnitudeRange &&
+              <DashboardSettings
+                magnitudeRange={ magnitudeRange }
+                updateMagnitudeRange={ updateMagnitudeRange }
+                quakeTypes={ quakeTypes }
+                updateTypeToShow={ updateTypeToShow }
+              />
+          }
         </SectionLeft>
 
         <div>
@@ -104,7 +153,7 @@ function Dashboard (props) {
           />}
           {/* magnitude chart */}
           { data &&
-            <MagnitudeChart events={ eventsToRender } />
+            <MagnitudeChart events={ eventsToRender } typeToShow={ typeToShow } />
           }
         </SectionRight>
 
