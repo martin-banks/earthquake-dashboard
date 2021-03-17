@@ -66,17 +66,19 @@ const QuakeTypeLabel = Styled.p`
 
 
 function DashboardSettings (props) {
-  const { magnitudeRange, updateMagnitudeRange } = props
+  const {
+    magnitudeRange,
+    updateMagnitudeRange,
+    quakeTypes,
+    updateTypeToShow,
+  } = props
 
   const [ showType, setShowType ] = useState(0)
   const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
   // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10 })
+  const [ min, updateMin ] = useState(0)
+  const [ max, updateMax ] = useState(0)
 
-  const quakeTypes = [
-    'All',
-    'Quakes felt',
-    'Tsunami warnings',
-  ]
   const dateRangePresets = [
     {
       label: 'Last 24 hours',
@@ -94,8 +96,9 @@ function DashboardSettings (props) {
 
 
   const changeType = index => {
-    console.log('click', index)
+    console.log('click', quakeTypes[index].label)
     setShowType(index)
+    updateTypeToShow(quakeTypes[index])
   }
 
   const handleDateRangeUpdate = val => {
@@ -103,7 +106,10 @@ function DashboardSettings (props) {
   }
 
   useEffect(() => {
+    console.log({ magnitudeRange })
     updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+    updateMin(magnitudeRange.min)
+    updateMax(magnitudeRange.max)
   }, [])
 
   // const updateMagnitudeRange = x => {
@@ -133,16 +139,19 @@ function DashboardSettings (props) {
       <h3>Magnitude range</h3>
       <InputRange
         draggableTrack
-        min={ rangeToUse.min }
-        max={ rangeToUse.max }
+        minValue={ rangeToUse.min }
+        maxValue={ rangeToUse.max }
         step={ 0.1 }
-        value={{ min: rangeToUse.min, max: rangeToUse.max }}
+        value={{ min, max }}
         formatLabel={ value => value.toFixed(1)}
         onChange={ x => {
-          updateRangeToUse({ min: x.min, max: x.max})
+          updateMin(x.min)
+          updateMax(x.max)
+          // updateRangeToUse({ min: x.min, max: x.max})
         }}
         onChangeComplete={ x => {
-          updateMagnitudeRange({ min: x.min.toFixed(1), max: x.max.toFixed(1) })
+          console.log('values from input range', x.min, x.max)
+          updateMagnitudeRange({ min: x.min, max: x.max })
         }}
       />
       {/* <MagnitudeRange updateRange={ updateMagnitudeRange } /> */}
@@ -161,7 +170,7 @@ function DashboardSettings (props) {
           <QuakeTypes>
             {
               quakeTypes.map((type, i) => <div onClick={ e => changeType(i) } key={ `quake-type-filter-${i}` }>
-                <QuakeTypeLabel active={ i === showType }>{ type }</QuakeTypeLabel>
+                <QuakeTypeLabel active={ i === showType }>{ type.label }</QuakeTypeLabel>
               </div>)
             }
           </QuakeTypes>
