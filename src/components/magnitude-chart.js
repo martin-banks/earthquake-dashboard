@@ -66,7 +66,10 @@ const Popup = Styled.div`
 
 
 function MagnitudeChart (props) {
-  const { events } = props
+  const {
+    events,
+    typeToShow,
+  } = props
 
   const [ magnitudes, storeMagnitudes ] = useState(null)
   const [ magnitudeKeys, storeMagnitudeKeys ] = useState([])
@@ -82,20 +85,25 @@ function MagnitudeChart (props) {
     if (!events) return
     // console.log({ events })
     // Split data into subests grouped to each quater dof magnitude -1 to 10
-    // ! Because magnitudes aremeasured on a logarhytmic scale very minor quakes can result in negative numbers
+    // ! Because magnitudes are measured on a logarhytmic scale very minor quakes can result in negative numbers
     // https://www.usgs.gov/faqs/how-can-earthquake-have-a-negative-magnitude?qt-news_science_products=0#qt-news_science_products
 
     const allMags = {}
-    const magValues = []
+    let magValues = []
 
-    for (let mag of events) {
-      const cleanMag = Math.round(mag.properties.mag * 10) / 10
-      if (!allMags[ `mag__${cleanMag}` ]) {
-        allMags[ `mag__${cleanMag}`] = 0
-        magValues.push(cleanMag)
+    if (events.length) {
+      for (let mag of events) {
+        const cleanMag = Math.round(mag.properties.mag * 10) / 10
+        if (!allMags[ `mag__${cleanMag}` ]) {
+          allMags[ `mag__${cleanMag}`] = 0
+          magValues.push(cleanMag)
+        }
+        allMags[`mag__${cleanMag}`] += 1
       }
-      allMags[`mag__${cleanMag}`] += 1
+    } else {
+      magValues = null
     }
+
 
     const sortedMags = Object.keys(allMags).sort((a, b) => {
       const aMag = parseFloat(a.replace('mag__', ''))
@@ -109,14 +117,11 @@ function MagnitudeChart (props) {
     storeChartData(allMags)
     storeMagnitudes(sortedMags)
 
-    // let minMag = magnitudeRange?.min
-    let minMag = Math.min(...magValues)
-    // let maxMag = magnitudeRange?.max
-    let maxMag = Math.max(...magValues)
+    let minMag = magValues ? Math.min(...magValues) : 0
+    let maxMag = magValues ? Math.max(...magValues) : 0
 
-    // console.log(maxMag, minMag, ((maxMag + 0.1) * 10) - (minMag * 10))
-
-    const magKeys = [...new Array(Math.ceil((maxMag + 0.1) * 10) - (minMag * 10))]
+    const keyCount = Math.ceil((maxMag + 0.1) * 10) - (minMag * 10)
+    const magKeys = [...new Array(keyCount)]
       .map((_, i) => ((minMag * 10) + i) / 10)
 
     storeMagnitudeKeys(magKeys)
@@ -139,7 +144,7 @@ function MagnitudeChart (props) {
 
   return <Container>
     <div>
-      <h3>Magnitudes</h3>
+      <h3>Magnitudes for { typeToShow.label.toLowerCase() }</h3>
       <p><i>Quake magnitudes can be negative numbers due to the way they are calculated and are typically very minor. <a href="https://www.usgs.gov/faqs/how-can-earthquake-have-a-negative-magnitude?qt-news_science_products=0#qt-news_science_products">Visit the USGS to learn more.</a></i></p>
     </div>
 
