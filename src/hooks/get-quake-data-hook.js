@@ -1,38 +1,32 @@
-import React, { useState, useEffect } from 'React'
+import { useState, useEffect } from 'react'
 
 import getQuakeData from '../functions/get-quake-data'
 
+const initialEndDate = new Date(new Date().setHours(0, 0, 0, 0)) // midnight today
+const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 7))
+
 function useQuakeData () {
   const [ data, storeData ] = useState(null)
-  const [ settings, updateSettings ] = useState({
-    days: 7,
-    dateStart: null,
-    dateEnd: null,
+  const [ events, storeEvents ] = useState(null)
+  const [ dates, setDates ] = useState({
+    start: initialStartDate,
+    end: initialEndDate,
   })
-  const [ loading, updateLodaing ] = useState(false)
-
+  const [ loading, setLoading ] = useState(false)
+  const [ error, setError ] = useState(null)
 
 
   useEffect(() => {
-    updateLodaing(true)
-    const {
-      days,
-      dateStart,
-      dateEnd,
-    } = settings
+    console.log('date change detected', dates)
+    setLoading(true)
 
-    const today = new Date(dateEnd || new Date().setHours(0,0,0,0)) // midnight today
-    const firstDay = new Date(dateStart || new Date().setDate(today.getDate() - days))
+    const monthFrom = `0${dates.start.getMonth() + 1}`.slice(-2)
+    const dayFrom = `0${dates.start.getDate()}`.slice(-2)
+    const yearFrom = dates.start.getFullYear()
 
-    console.log({ firstDay, today })
-
-    const monthFrom = `0${firstDay.getMonth() + 1}`.slice(-2)
-    const dayFrom = `0${firstDay.getDate()}`.slice(-2)
-    const yearFrom = firstDay.getFullYear()
-
-    const monthTo = `0${today.getMonth() + 1}`.slice(-2)
-    const dayTo = `0${today.getDate()}`.slice(-2)
-    const yearTo = today.getFullYear()
+    const monthTo = `0${dates.end.getMonth() + 1}`.slice(-2)
+    const dayTo = `0${dates.end.getDate()}`.slice(-2)
+    const yearTo = dates.end.getFullYear()
 
     const dateFrom = `${yearFrom}-${monthFrom}-${dayFrom}`
     const dateTo = `${yearTo}-${monthTo}-${dayTo}`
@@ -40,20 +34,26 @@ function useQuakeData () {
 
     getQuakeData({ dateFrom, dateTo })
       .then(response => {
-        setData(response)
+        storeData(response)
         storeEvents(response.events)
+        setLoading(false)
       })
-      .catch(err => console.error({ err }))
+      .catch(err => {
+        console.error('--- ERROR FETCHING DATA ---\n', err)
+        setError(err)
+      })
 
-  }, [ settings ])
+  }, [ dates ])
 
   return {
     data,
+    events,
     storeData,
-    settings,
-    updateSettings,
+    dates,
+    setDates,
     loading,
     // updateLoading,
+    error,
   }
 }
 

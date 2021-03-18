@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import Styled, { css } from 'styled-components'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
+
+import useQuakeData from '../hooks/get-quake-data-hook'
+// import useQuakeData from '../hooks/mouse-position-hook'
 
 
 import QuakeTotals from './quake-totals'
@@ -53,7 +56,7 @@ const quakeTypes = [
 ]
 
 function Dashboard (props) {
-  const { data } = props
+  const { setLoading, setError } = props
 
   // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10})
   const [ magnitudeRange, updateMagnitudeRange ] = useState(null)
@@ -69,9 +72,21 @@ function Dashboard (props) {
 
   const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
 
+  const {
+    data,
+    events,
+    // storeData,
+    // settings,
+    dates,
+    setDates,
+    loading,
+    error,
+  } = useQuakeData()
+
 
   useEffect(() => {
     if (!data) return
+    // setLoading(true)
     const magnitudes = []
     for (let event of data.events) {
       magnitudes.push(Math.round(event.properties.mag * 10) / 10)
@@ -81,11 +96,14 @@ function Dashboard (props) {
 
     console.log('range to use\n', { min, max })
     updateMagnitudeRange({ min, max })
-  }, [data])
+
+    // setLoading(false)
+  }, [ data ])
+
 
   useEffect(() => {
     if (!data || !magnitudeRange) return
-
+    // setLoading(true)
     // updateTypeToShow(quakeTypes[0])
 
     const filteredByRange = data.events.filter(e => {
@@ -94,7 +112,6 @@ function Dashboard (props) {
 
     const felt = filteredByRange.filter(f => f.properties.felt)
     const tsunami = filteredByRange.filter(f => f.properties.tsunami)
-
     const updatedData = {
       all: filteredByRange,
       felt,
@@ -111,7 +128,17 @@ function Dashboard (props) {
 
     updateEventsToRender(updatedData[typeToShow.type])
 
+    // setLoading(false)
+
   }, [ data, magnitudeRange, typeToShow ])
+
+  useEffect(() => {
+    setLoading(loading)
+  }, [ loading ])
+
+  useEffect(() => {
+    setError(error)
+  }, [ error ])
 
 
 
@@ -126,18 +153,25 @@ function Dashboard (props) {
                 updateMagnitudeRange={ updateMagnitudeRange }
                 quakeTypes={ quakeTypes }
                 updateTypeToShow={ updateTypeToShow }
-                dateRange={ dateRange }
+                dateRange={ data.dateRange }
+                dates={ dates }
+                setDates={ setDates }
               />
           }
         </SectionLeft>
 
         <div>
+          { (events?.length < 1) &&
+              <h2>No results found please try adjusting your settings</h2>
+          }
           <p>This space is a cutout for the globe behind</p>
           <pre className="dump">
             {
               JSON.stringify({
+                // data,
+                // events
                 keys: data && Object.keys(data),
-                dates: data?.dateRange,
+                dates,
                 felt: data?.felt?.length,
                 tsunami: data?.tsunami?.length,
                 events: data?.events?.length,
