@@ -126,6 +126,7 @@ function Dashboard (props) {
                 updateMagnitudeRange={ updateMagnitudeRange }
                 quakeTypes={ quakeTypes }
                 updateTypeToShow={ updateTypeToShow }
+                dateRange={ dateRange }
               />
           }
         </SectionLeft>
