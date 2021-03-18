@@ -84,7 +84,7 @@ function TitleOverlay (props) {
       <div>
         <Title>Earthquakes</Title>
         <Hr />
-        <Intro>Every earthquake from the last seven days around the world</Intro>
+        <Intro>Every earthquake around the world</Intro>
       </div>
 
 
@@ -101,7 +101,7 @@ function TitleOverlay (props) {
         error &&
           <pre>
             <code>
-              { error }
+              { JSON.stringify({ error }, null, 2) }
             </code>
           </pre>
       }
