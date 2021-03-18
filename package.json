@@ -1,7 +1,7 @@
 {
-  "name": "project-template-gatsby",
+  "name": "earthquake-dashboard",
   "private": true,
-  "description": "A simple starter to get up and developing personal projects quickly with Gatsby",
+  "description": "Dashboard to display every recorded around the world with controls to filter by magnitude, date and type.",
   "version": "0.2.0",
   "author": "Martin Banks <email@martinbanks.com.au>",
   "dependencies": {
@@ -31,6 +31,9 @@
     "@storybook/addon-viewport": "^6.1.14",
     "@storybook/react": "^6.1.14",
     "babel-loader": "^8.2.2",
+    "eslint": "^7.22.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "prettier": "^1.19.1"
   },
   "keywords": [
