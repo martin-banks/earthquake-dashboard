@@ -8,6 +8,8 @@ import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
 
+import timelinePosition from '../functions/timline-position'
+
 
 const Container = Styled.article`
   display: grid;
@@ -18,7 +20,7 @@ const Container = Styled.article`
   margin: 0;
 `
 const sharedStyles = css`
-  outline: solid 2px pink;
+  /* outline: solid 2px pink; */
 `
 const MainSection = Styled.section`
   display: grid;
@@ -33,7 +35,23 @@ const SectionRight = Styled.section`
   grid-template-rows: auto 1fr;
 `
 const SectionBottom = Styled.section`
-  outline: solid 2px cyan;
+  /* outline: solid 2px cyan; */
+  padding: 2rem;
+`
+
+const Timeline = Styled.section`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 50px;
+  /* outline: solid 1px cyan; */
+`
+const TimelineMark = Styled.div`
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  left: ${p => p.x}%;
+  background: rgba(200,200,0, 0.2);
 `
 
 
@@ -158,6 +176,7 @@ function Dashboard (props) {
                 tsunami: data?.tsunami?.length,
                 events: data?.events?.length,
                 magnitudeRange,
+                // sampleEvent: data?.events?.[0]
               }, null, 2)
             }
           </pre>
@@ -178,6 +197,16 @@ function Dashboard (props) {
       <SectionBottom>
         {/* popup details */}
         {/* timeline / scrubber */}
+        <h3>Timeline of quakes</h3>
+        <p>Each mark represents a single quake event</p>
+        <Timeline>
+          {
+            eventsToRender?.map((e, i) => <TimelineMark key={ `timeline-mark-${i}` } x={ timelinePosition({
+              from: dates.start.getTime(),
+              to: dates.end.getTime(),
+              time: e.properties.time}) } />)
+          }
+        </Timeline>
       </SectionBottom>
 
     </Container>
