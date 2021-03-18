@@ -1,10 +1,6 @@
 
-
 function quakeData ({ dateFrom, dateTo }) {
-
   const endpoint = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${dateFrom}&endtime=${dateTo}`
-
-  console.log(endpoint)
 
   return new Promise ((resolve, reject) => {
     fetch(endpoint)
@@ -35,9 +31,11 @@ function quakeData ({ dateFrom, dateTo }) {
         })
       })
       .catch(error => {
+        console.log('raw error', error)
         reject({
           success: false,
-          message: error,
+          message: 'Error fetching data',
+          error: `${error}`,
         })
       })
   })

@@ -17,7 +17,6 @@ function useQuakeData () {
 
 
   useEffect(() => {
-    console.log('date change detected', dates)
     setLoading(true)
 
     const monthFrom = `0${dates.start.getMonth() + 1}`.slice(-2)
@@ -41,6 +40,9 @@ function useQuakeData () {
       .catch(err => {
         console.error('--- ERROR FETCHING DATA ---\n', err)
         setError(err)
+        setTimeout(() => {
+          setLoading(false)
+        }, 3 * 1000)
       })
 
   }, [ dates ])
@@ -54,6 +56,7 @@ function useQuakeData () {
     loading,
     // updateLoading,
     error,
+    // updateError,
   }
 }
 
