@@ -4,7 +4,7 @@ import InputRange from 'react-input-range'
 
 // import 'react-input-range/lib/css/index.css'
 
-import DropdownMenu from './dropdown-menu'
+// import DropdownMenu from './dropdown-menu'
 // import MagnitudeRange from './magnitude-range'
 
 const DateContainer = Styled.div`
@@ -12,7 +12,6 @@ const DateContainer = Styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 `
-
 
 const Wrapper = Styled.section`
   min-width: 200px;
@@ -72,13 +71,24 @@ const QuakeTypeLabel = Styled.p`
 `
 
 
+function formatInputDate (rawDate) {
+  const d = new Date(rawDate)
+  const year = d.getFullYear()
+  const month = `0${d.getMonth() + 1}`.slice(-2)
+  const day = `0${d.getDate()}`.slice(-2)
+
+  return `${year}-${month}-${day}`
+}
+
+
 function DashboardSettings (props) {
   const {
     magnitudeRange,
     updateMagnitudeRange,
     quakeTypes,
     updateTypeToShow,
-    dateRange,
+    dates,
+    setDates,
     requestNewData,
     sendDateUpdate,
   } = props
@@ -89,24 +99,25 @@ function DashboardSettings (props) {
   const [ max, updateMax ] = useState(0)
   const [ minDate, updateMinDate ] = useState(null)
   
-  const [ today, storeToday ] = useState(null)
-  const [ dateFrom, updateDateFrom ] = useState(null)
-  const [ dateTo, updateDateTo ] = useState(null)
+  // const [ dateTo, setDateTo ] = useState(null)
+  const [ dateFrom, setDateFrom ] = useState(null)
+  const [ dateTo, setDateTo ] = useState(null)
+  const [ today, setToday ] = useState(formatInputDate(new Date))
 
-  const dateRangePresets = [
-    {
-      label: 'Last 24 hours',
-      value: 1,
-    },
-    {
-      label: 'Last 7 days',
-      value: 7,
-    },
-    {
-      label: 'Last 4 weeks',
-      value: 28,
-    },
-  ]
+  // const dateRangePresets = [
+  //   {
+  //     label: 'Last 24 hours',
+  //     value: 1,
+  //   },
+  //   {
+  //     label: 'Last 7 days',
+  //     value: 7,
+  //   },
+  //   {
+  //     label: 'Last 4 weeks',
+  //     value: 28,
+  //   },
+  // ]
 
 
   const changeType = index => {
@@ -120,21 +131,24 @@ function DashboardSettings (props) {
 
 
   useEffect(() => {
-    if (!dateRange) return
-    console.log({ dateRange })
-    const date = new Date(dateRange.to)
-    const year = date.getFullYear()
-    const month = `0${date.getMonth() + 1}`.slice(-2)
-    const day = `0${date.getDate()}`.slice(-2)
-    const today = `${year}-${month}-${day}`
+    if (!dates) return
+    console.log({ dates })
+    // const date = new Date(dates.end)
+    // const year = date.getFullYear()
+    // const month = `0${date.getMonth() + 1}`.slice(-2)
+    // const day = `0${date.getDate()}`.slice(-2)
+    // const today = `${year}-${month}-${day}`
 
-    storeToday(today)
-    updateDateTo(today)
+    const dateTo = formatInputDate(dates.end)
+    const dateFrom = formatInputDate(dates.start)
+
+    setDateTo(dateTo)
+    setDateFrom(dateFrom)
 
     updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
     updateMin(magnitudeRange.min)
     updateMax(magnitudeRange.max)
-  }, [ dateRange ])
+  }, [ dates ])
 
 
 
@@ -154,18 +168,18 @@ function DashboardSettings (props) {
     
   // }, [ dateFrom, dateTo ])
 
-  const handleDateUpdate = ({ from, to }) => {
-    if (from) {
-      updateDateFrom(from)
-    }
-    if (to) {
-      updateDateTo(to)
-    }
-    sendDateUpdate({
-      from: dateFrom,
-      to: dateTo,
-    })
-  }
+  // const handleDateUpdate = ({ from, to }) => {
+  //   if (from) {
+  //     updateDateFrom(from)
+  //   }
+  //   if (to) {
+  //     updateDateTo(to)
+  //   }
+  //   sendDateUpdate({
+  //     from: dateFrom,
+  //     to: dateTo,
+  //   })
+  // }
 
 
 
@@ -185,24 +199,36 @@ function DashboardSettings (props) {
 
       <DateContainer>
         <div>
-          <label for="date-from">Date from</label>
+          <label htmlFor="date-from">Date from</label>
           <input
             id="date-from"
             type="date"
             max={ dateTo }
-            value={ dateFrom }
-            onChange={ e => handleDateUpdate({ from: e.target.value }) }
-          />
+            value={ formatInputDate(dates.start) }
+            onChange={ e => {
+              setDateFrom(formatInputDate(e?.target?.value))
+              setDates({
+                start: new Date(e?.target?.value),
+                end: new Date(dateTo),
+              })
+            }}
+            />
         </div>
         <div>
-          <label for="date-to">Date to</label>
+          <label htmlFor="date-to">Date to</label>
           <input
             id="date-to"
             type="date"
-            min={ dateFrom }
-            max={ today }
-            value={ dateTo }
-            onChange={ e => handleDateUpdate({ to: e.target.value }) }
+            min={ formatInputDate(dates.start) }
+            max={ formatInputDate(today) }
+            value={ formatInputDate(dates.end) }
+            onChange={ e => {
+              setDateTo(formatInputDate(e?.target?.value))
+              setDates({
+                start: new Date(dateFrom),
+                end: new Date(e?.target?.value),
+              })
+            }}
           />
         </div>
       </DateContainer>
