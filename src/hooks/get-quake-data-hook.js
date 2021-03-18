@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import getQuakeData from '../functions/get-quake-data'
+import formatDate from '../functions/format-input-date'
 
 const initialEndDate = new Date(new Date().setHours(0, 0, 0, 0)) // midnight today
 const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 7))
@@ -19,17 +20,8 @@ function useQuakeData () {
   useEffect(() => {
     setLoading(true)
 
-    const monthFrom = `0${dates.start.getMonth() + 1}`.slice(-2)
-    const dayFrom = `0${dates.start.getDate()}`.slice(-2)
-    const yearFrom = dates.start.getFullYear()
-
-    const monthTo = `0${dates.end.getMonth() + 1}`.slice(-2)
-    const dayTo = `0${dates.end.getDate()}`.slice(-2)
-    const yearTo = dates.end.getFullYear()
-
-    const dateFrom = `${yearFrom}-${monthFrom}-${dayFrom}`
-    const dateTo = `${yearTo}-${monthTo}-${dayTo}`
-
+    const dateFrom = formatDate(dates.start)
+    const dateTo = formatDate(dates.end)
 
     getQuakeData({ dateFrom, dateTo })
       .then(response => {
