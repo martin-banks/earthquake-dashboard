@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Styled, { css } from 'styled-components'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 
 import useQuakeData from '../hooks/get-quake-data-hook'
-// import useQuakeData from '../hooks/mouse-position-hook'
-
 
 import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
+
 
 const Container = Styled.article`
   display: grid;
@@ -21,7 +20,6 @@ const Container = Styled.article`
 const sharedStyles = css`
   outline: solid 2px pink;
 `
-
 const MainSection = Styled.section`
   display: grid;
   grid-template-columns: auto 60% auto;
@@ -39,7 +37,6 @@ const SectionBottom = Styled.section`
 `
 
 
-
 const quakeTypes = [
   {
     label: 'All quakes',
@@ -55,28 +52,21 @@ const quakeTypes = [
   },
 ]
 
-function Dashboard (props) {
-  const { setLoading, setError } = props
 
-  // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10})
+function Dashboard (props) {
+  const {
+    setLoading,
+    setError,
+  } = props
+
   const [ magnitudeRange, updateMagnitudeRange ] = useState(null)
   const [ eventsToRender, updateEventsToRender ] = useState(null)
-  // const [ feltEvents, updateFeltEvents ] = useState(null)
-  // const [ tsunamiEvents, updateTsunamiEvents ] = useState(null)
-  // const [ allEvents, updateAllEvents ] = useState(null)
-  // const [ magnitudes, setMags ] = useState(null)
-  // const [ events, storeEvents ] = useState(null)
   const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
-
-  const [ eventsByType, updateEventsByType ] = useState({ all: 0, tsunami: 0, felt: 0 })
-
   const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
 
   const {
     data,
     events,
-    // storeData,
-    // settings,
     dates,
     setDates,
     loading,
@@ -86,30 +76,25 @@ function Dashboard (props) {
 
   useEffect(() => {
     if (!data) return
-    // setLoading(true)
+
     const magnitudes = []
     for (let event of data.events) {
       magnitudes.push(Math.round(event.properties.mag * 10) / 10)
     }
+
     const min = Math.min(...magnitudes)
     const max = Math.max(...magnitudes)
 
-    console.log('range to use\n', { min, max })
     updateMagnitudeRange({ min, max })
-
-    // setLoading(false)
   }, [ data ])
 
 
   useEffect(() => {
     if (!data || !magnitudeRange) return
-    // setLoading(true)
-    // updateTypeToShow(quakeTypes[0])
 
     const filteredByRange = data.events.filter(e => {
       return (e.properties.mag >= magnitudeRange.min) && (e.properties.mag <= magnitudeRange.max)
     })
-
     const felt = filteredByRange.filter(f => f.properties.felt)
     const tsunami = filteredByRange.filter(f => f.properties.tsunami)
     const updatedData = {
@@ -118,8 +103,6 @@ function Dashboard (props) {
       tsunami,
     }
 
-    updateEventsByType(updatedData)
-
     updateTotals({
       felt: felt.length,
       tsunami: tsunami.length,
@@ -127,9 +110,6 @@ function Dashboard (props) {
     })
 
     updateEventsToRender(updatedData[typeToShow.type])
-
-    // setLoading(false)
-
   }, [ data, magnitudeRange, typeToShow ])
 
   useEffect(() => {
@@ -146,7 +126,8 @@ function Dashboard (props) {
     <Container>
       <MainSection>
 
-        <SectionLeft>{
+        <SectionLeft>
+          {
             magnitudeRange &&
               <DashboardSettings
                 magnitudeRange={ magnitudeRange }
@@ -161,7 +142,8 @@ function Dashboard (props) {
         </SectionLeft>
 
         <div>
-          { (events?.length < 1) &&
+          {
+            (events?.length < 1) &&
               <h2>No results found please try adjusting your settings</h2>
           }
           <p>This space is a cutout for the globe behind</p>
@@ -182,17 +164,16 @@ function Dashboard (props) {
         </div>
 
         <SectionRight>
-          {/* Totals */}
-          { data && <QuakeTotals
-            totals={ totals }
-          />}
-          {/* magnitude chart */}
-          { data &&
-            <MagnitudeChart events={ eventsToRender } typeToShow={ typeToShow } />
+          {
+            data && <>
+              <QuakeTotals totals={ totals } />
+              <MagnitudeChart events={ eventsToRender } typeToShow={ typeToShow } />
+            </>
           }
         </SectionRight>
 
       </MainSection>
+
 
       <SectionBottom>
         {/* popup details */}
@@ -203,9 +184,10 @@ function Dashboard (props) {
   )
 }
 
-// Dashboard.defaultPropTypes = {}
-// Dashboard.proptypes = {}
 
+Dashboard.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+}
 
 export default Dashboard
-
