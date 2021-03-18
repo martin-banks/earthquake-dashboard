@@ -119,6 +119,31 @@ a {
   font-weight: 400;
 }
 
+label {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  display: block;
+  font-family: dharma-gothic-e;
+}
+input[type=date] {
+  box-sizing: border-box;
+  display: block;
+  background: none;
+  color: black;
+  border: solid 1px rgba(100,100,100, 0.5);
+  border-radius: 4px;
+  font-size: 2rem;
+  padding: 1rem;
+  width: 100%;
+}
+@media screen and (prefers-color-scheme: dark) {
+  input[type=date] {
+    filter: invert(1)
+  }
+}
+
+
 path {
   transition: fill 200ms;
 }
