@@ -27,7 +27,6 @@ const Title = Styled.h1`
   font-weight: 100;
   text-align: center;
   letter-spacing: 3px;
-  /* margin-bottom: 8rem; */
 `
 const Intro = Styled.h3`
   font-size: 3rem;
@@ -72,7 +71,6 @@ const Circle = Styled.circle`
 `
 
 
-
 function TitleOverlay (props) {
   const {
     loading,
@@ -81,20 +79,21 @@ function TitleOverlay (props) {
 
   return <Container>
     <div>
+
       <div>
         <Title>Earthquakes</Title>
         <Hr />
         <Intro>Every earthquake around the world</Intro>
       </div>
 
-
-      { loading && 
-        <div>
-          <Loading>Loading...</Loading>
-          <Svg viewBox="0 0 10 10">
-            <Circle r="5" cx="5" cy="5" />
-          </Svg>
-        </div>
+      {
+        loading && 
+          <div>
+            <Loading>Loading...</Loading>
+            <Svg viewBox="0 0 10 10">
+              <Circle r="5" cx="5" cy="5" />
+            </Svg>
+          </div>
       }
 
       {
@@ -110,12 +109,14 @@ function TitleOverlay (props) {
   </Container>
 }
 
+
 TitleOverlay.defaultProps = {
   loading: true
 }
 
 TitleOverlay.propTypes = {
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  error: PropTypes.object,
 }
 
 
