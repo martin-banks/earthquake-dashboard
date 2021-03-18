@@ -7,6 +7,13 @@ import InputRange from 'react-input-range'
 import DropdownMenu from './dropdown-menu'
 // import MagnitudeRange from './magnitude-range'
 
+const DateContainer = Styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+`
+
+
 const Wrapper = Styled.section`
   min-width: 200px;
   max-width: 500px;
@@ -61,7 +68,7 @@ const QuakeTypeLabel = Styled.p`
   margin: 0;
   text-align: center;
   word-spacing: 1000px;
-  opacity: ${ p => p.active ? 1 : 0.5};
+  opacity: ${ p => p.active ? 1 : 0.5 };
 `
 
 
@@ -71,13 +78,20 @@ function DashboardSettings (props) {
     updateMagnitudeRange,
     quakeTypes,
     updateTypeToShow,
+    dateRange,
+    requestNewData,
+    sendDateUpdate,
   } = props
 
   const [ showType, setShowType ] = useState(0)
   const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
-  // const [ magnitudeRange, updateMagnitudeRange ] = useState({ min: -2, max: 10 })
   const [ min, updateMin ] = useState(0)
   const [ max, updateMax ] = useState(0)
+  const [ minDate, updateMinDate ] = useState(null)
+  
+  const [ today, storeToday ] = useState(null)
+  const [ dateFrom, updateDateFrom ] = useState(null)
+  const [ dateTo, updateDateTo ] = useState(null)
 
   const dateRangePresets = [
     {
@@ -96,7 +110,6 @@ function DashboardSettings (props) {
 
 
   const changeType = index => {
-    console.log('click', quakeTypes[index].label)
     setShowType(index)
     updateTypeToShow(quakeTypes[index])
   }
@@ -105,12 +118,56 @@ function DashboardSettings (props) {
     console.log(val)
   }
 
+
   useEffect(() => {
-    console.log({ magnitudeRange })
+    if (!dateRange) return
+    console.log({ dateRange })
+    const date = new Date(dateRange.to)
+    const year = date.getFullYear()
+    const month = `0${date.getMonth() + 1}`.slice(-2)
+    const day = `0${date.getDate()}`.slice(-2)
+    const today = `${year}-${month}-${day}`
+
+    storeToday(today)
+    updateDateTo(today)
+
     updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
     updateMin(magnitudeRange.min)
     updateMax(magnitudeRange.max)
-  }, [])
+  }, [ dateRange ])
+
+
+
+  // useEffect(() => {
+    // if dateFrom are before dateRange.from
+    // request data update
+
+    // if dataFrom is above dateRange.from
+    // filter existing data
+
+
+    // if dateTo is above dateRange.to
+    // request date update
+
+    // if dataTo is below dateRange.to
+    // filter existing data
+    
+  // }, [ dateFrom, dateTo ])
+
+  const handleDateUpdate = ({ from, to }) => {
+    if (from) {
+      updateDateFrom(from)
+    }
+    if (to) {
+      updateDateTo(to)
+    }
+    sendDateUpdate({
+      from: dateFrom,
+      to: dateTo,
+    })
+  }
+
+
 
   // const updateMagnitudeRange = x => {
   //   const { value, type } = x
@@ -126,12 +183,36 @@ function DashboardSettings (props) {
     <Section>
       <h3>Date range</h3>
 
-      <DropdownMenu
+      <DateContainer>
+        <div>
+          <label for="date-from">Date from</label>
+          <input
+            id="date-from"
+            type="date"
+            max={ dateTo }
+            value={ dateFrom }
+            onChange={ e => handleDateUpdate({ from: e.target.value }) }
+          />
+        </div>
+        <div>
+          <label for="date-to">Date to</label>
+          <input
+            id="date-to"
+            type="date"
+            min={ dateFrom }
+            max={ today }
+            value={ dateTo }
+            onChange={ e => handleDateUpdate({ to: e.target.value }) }
+          />
+        </div>
+      </DateContainer>
+
+      {/* <DropdownMenu
         label="Default presets"
         options={ dateRangePresets }
         initialActive={ 1 }
         handleUpdate={ handleDateRangeUpdate }
-      />
+      /> */}
     </Section>
 
     <Section>
