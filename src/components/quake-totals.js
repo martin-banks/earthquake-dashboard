@@ -39,19 +39,19 @@ const QuakeTotals = props => {
   return <Container>
     <StatFull>
       <Kicker>Total quakes</Kicker>
-      <Value>{ all }</Value>
+      <Value>{ all.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
 
     </StatFull>
 
     <StatHalf>
       <Kicker>Tsunami warnings</Kicker>
-      <Value>{ tsunami }</Value>
+      <Value>{ tsunami.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
 
     </StatHalf>
 
     <StatHalf> 
       <Kicker>How many were felt</Kicker>
-      <Value>{ felt }</Value>
+      <Value>{ felt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
 
     </StatHalf>
   </Container>
