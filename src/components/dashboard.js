@@ -20,11 +20,12 @@ const Container = Styled.article`
   margin: 0;
 `
 const sharedStyles = css`
-  /* outline: solid 2px pink; */
+  padding: 2rem;
+  width: 20vw;
 `
 const MainSection = Styled.section`
   display: grid;
-  grid-template-columns: auto 60% auto;
+  grid-template-columns: auto 1fr auto;
 `
 const SectionLeft = Styled.section`
   ${ sharedStyles };
@@ -42,17 +43,17 @@ const SectionBottom = Styled.section`
 const Timeline = Styled.section`
   position: relative;
   display: block;
-  width: 100%;
+  /* width: 100%; */
   height: 50px;
-  /* outline: solid 1px cyan; */
+  outline: solid 1px cyan;
 `
-const TimelineMark = Styled.div`
-  position: absolute;
-  width: 1px;
-  height: 100%;
-  left: ${p => p.x}%;
-  background: rgba(200,200,0, 0.2);
-`
+// const TimelineMark = Styled.div`
+//   position: absolute;
+//   width: 1px;
+//   height: 100%;
+//   left: ${p => p.x}%;
+//   background: rgba(200,200,0, 0.2);
+// `
 
 
 const quakeTypes = [
@@ -82,6 +83,9 @@ function Dashboard (props) {
   const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
   const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
 
+  const [ dateFrom, setDateFrom ] = useState(null)
+  const [ dateTo, setDateTo ] = useState(null)
+
   const {
     data,
     events,
@@ -90,6 +94,11 @@ function Dashboard (props) {
     loading,
     error,
   } = useQuakeData()
+
+  useEffect(() => {
+    setDateFrom(dates.start.getTime())
+    setDateTo(dates.end.getTime())
+  }, [ dates ])
 
 
   useEffect(() => {
@@ -200,13 +209,35 @@ function Dashboard (props) {
         <h3>Timeline of quakes</h3>
         <p>Each mark represents a single quake event</p>
         <Timeline>
-          {
-            eventsToRender?.map((e, i) => <TimelineMark key={ `timeline-mark-${i}` } x={ timelinePosition({
-              from: dates.start.getTime(),
-              to: dates.end.getTime(),
-              time: e.properties.time}) } />)
+          {/* this position is not calcualting correctly */}
+          { true &&
+            eventsToRender?.map((e, i) => <div
+              className="timelineMark"
+              style={{
+                left: `${timelinePosition({
+                  from: dateFrom,
+                  to: dateTo,
+                  time: e.properties.time,
+                })}%`,
+                // transform: `translateX(${timelinePosition({
+                //   from: dates.start.getTime(),
+                //   to: dates.end.getTime(),
+                //   time: e.properties.time,
+                // })}%)`
+              }}
+              key={ `timeline-mark-${i}` }
+            />)
           }
         </Timeline>
+        <style jsx>{`
+          .timelineMark {
+            height: 100%;
+            position: absolute;
+            width: 0px;
+            height: 100%;
+            border-right: solid 1px rgba(200,200,0, 0.2);
+          }
+        `}</style>
       </SectionBottom>
 
     </Container>
