@@ -10,8 +10,6 @@ import formatInputDate from '../functions/format-input-date'
 
 
 const DateContainer = Styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 `
 const Wrapper = Styled.section`
@@ -20,8 +18,7 @@ const Wrapper = Styled.section`
 `
 const Section = Styled.div`
   padding: 2rem;
-  margin-top: 2rem;
-  border-top: solid 1px #979797;
+  margin-bottom: 3rem;
 `
 const Indent = Styled.div`
   padding: 0.5rem;
@@ -56,7 +53,7 @@ const QuakeTypes = Styled.div`
     padding: 1rem 1rem;
     align-items: center;
     justify-content: center;
-    &: hover {
+    &:hover {
       p {
         opacity: 0.6;
       }
@@ -68,7 +65,7 @@ const QuakeTypeLabel = Styled.p`
   margin: 0;
   text-align: center;
   word-spacing: 1000px;
-  opacity: ${ p => p.active ? 1 : 0.5 };
+  opacity: ${p => p.active ? 1 : 0.5};
 `
 
 
@@ -142,6 +139,7 @@ function DashboardSettings (props) {
           <label htmlFor="date-to">Date to</label>
           <input
             id="date-to"
+            className="last"
             type="date"
             min={ formatInputDate(dates.start) }
             max={ formatInputDate(today) }
@@ -168,7 +166,7 @@ function DashboardSettings (props) {
         maxValue={ rangeToUse.max }
         step={ 0.1 }
         value={{ min, max }}
-        formatLabel={ value => value.toFixed(1)}
+        formatLabel={ value => value.toFixed(1) }
         onChange={ x => {
           updateMin(x.min)
           updateMax(x.max)
