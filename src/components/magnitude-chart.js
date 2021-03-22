@@ -160,7 +160,7 @@ function MagnitudeChart (props) {
               onMouseOver={ e => handleMouseOver(m, e) }
               onMouseOut={ e => handleMouseOut(m, e) }
             >
-              <Value>{ chartData[`mag__${m}`] }</Value>
+              <Value>{ chartData[`mag__${m}`]?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
               <MagnitudeKey>{ `${m.toFixed(1)}` }</MagnitudeKey>
             </Bar>)
         }
