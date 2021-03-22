@@ -80,6 +80,7 @@ h3 {
   margin-bottom: 1rem;
   padding: 0;
   letter-spacing: 2px;
+  margin-bottom: 2rem;
 }
 h4 {
   font-family: dharma-gothic-e, sans-serif;
@@ -136,6 +137,10 @@ input[type=date] {
   font-size: 2rem;
   padding: 1rem;
   width: 100%;
+  margin-bottom: 2rem;
+}
+input[tpye=date].last {
+  margin: 0;
 }
 @media screen and (prefers-color-scheme: dark) {
   input[type=date] {
