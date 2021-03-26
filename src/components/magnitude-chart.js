@@ -95,8 +95,8 @@ function MagnitudeChart (props) {
     if (events.length) {
       for (let mag of events) {
         const cleanMag = Math.round(mag.properties.mag * 10) / 10
-        if (!allMags[ `mag__${cleanMag}` ]) {
-          allMags[ `mag__${cleanMag}`] = 0
+        if (!allMags[`mag__${cleanMag}`]) {
+          allMags[`mag__${cleanMag}`] = 0
           magValues.push(cleanMag)
         }
         allMags[`mag__${cleanMag}`] += 1
