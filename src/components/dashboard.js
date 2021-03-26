@@ -9,6 +9,7 @@ import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
 
 import timelinePosition from '../functions/timline-position'
+import quakeTypes from '../content/quake-types'
 
 
 const Container = Styled.article`
@@ -36,7 +37,6 @@ const SectionRight = Styled.section`
   grid-template-rows: auto 1fr;
 `
 const SectionBottom = Styled.section`
-  /* outline: solid 2px cyan; */
   padding: 2rem;
 `
 
@@ -45,31 +45,10 @@ const Timeline = Styled.section`
   display: block;
   /* width: 100%; */
   height: 50px;
-  outline: solid 1px cyan;
 `
-// const TimelineMark = Styled.div`
-//   position: absolute;
-//   width: 1px;
-//   height: 100%;
-//   left: ${p => p.x}%;
-//   background: rgba(200,200,0, 0.2);
-// `
 
 
-const quakeTypes = [
-  {
-    label: 'All quakes',
-    type: 'all'
-  },
-  {
-    label: 'Quakes felt',
-    type: 'felt'
-  },
-  {
-    label: 'Tsunami warnings',
-    type: 'tsunami'
-  },
-]
+
 
 
 function Dashboard (props) {
@@ -235,7 +214,7 @@ function Dashboard (props) {
             position: absolute;
             width: 0px;
             height: 100%;
-            border-right: solid 1px rgba(200,200,0, 0.2);
+            border-right: solid 1px rgba(200,200,0, 0.3);
           }
         `}</style>
       </SectionBottom>
