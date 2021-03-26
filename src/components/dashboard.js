@@ -43,9 +43,15 @@ const SectionBottom = Styled.section`
 const Timeline = Styled.section`
   position: relative;
   display: block;
-  /* width: 100%; */
+  width: 100%;
   height: 50px;
 `
+
+
+function timelineHeight (mag, max) {
+  const height = (((mag + 3) / (max + 3)) * 100)
+  return height
+}
 
 
 
@@ -189,23 +195,22 @@ function Dashboard (props) {
         <p>Each mark represents a single quake event</p>
         <Timeline>
           {/* this position is not calcualting correctly */}
-          { true &&
-            eventsToRender?.map((e, i) => <div
-              className="timelineMark"
-              style={{
-                left: `${timelinePosition({
-                  from: dateFrom,
-                  to: dateTo,
-                  time: e.properties.time,
-                })}%`,
-                // transform: `translateX(${timelinePosition({
-                //   from: dates.start.getTime(),
-                //   to: dates.end.getTime(),
-                //   time: e.properties.time,
-                // })}%)`
-              }}
-              key={ `timeline-mark-${i}` }
-            />)
+          {
+            eventsToRender &&
+              eventsToRender.map((e, i) => <div
+                className="timelineMark"
+                style={{
+                  left: `${timelinePosition({
+                    from: dateFrom,
+                    to: dateTo,
+                    time: e.properties.time,
+                  })}%`,
+                  borderColor: `rgba(255, ${200 - ((e.properties.mag + 5) / 20) * 200}, 0, 1)`,
+                  height: `${timelineHeight(e.properties.mag, magnitudeRange.max)}%`,
+
+                }}
+                key={ `timeline-mark-${i}` }
+              />)
           }
         </Timeline>
         <style jsx>{`
@@ -213,8 +218,9 @@ function Dashboard (props) {
             height: 100%;
             position: absolute;
             width: 0px;
-            height: 100%;
-            border-right: solid 1px rgba(200,200,0, 0.3);
+            bottom: 0;
+            border-right: solid 1px;
+            opacity: 0.3;
           }
         `}</style>
       </SectionBottom>
