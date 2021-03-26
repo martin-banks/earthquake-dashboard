@@ -3,8 +3,12 @@ import { useState, useEffect } from 'react'
 import getQuakeData from '../functions/get-quake-data'
 import formatDate from '../functions/format-input-date'
 
-const initialEndDate = new Date(new Date().setUTCHours(0, 0, 0, 0)) // midnight today
-const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 2))
+const initialEndDate = new Date()
+initialEndDate.setUTCHours(0, 0, 0, 0)
+
+const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 7))
+initialStartDate.setUTCHours(0, 0, 0, 0)
+
 
 function useQuakeData () {
   const [ data, storeData ] = useState(null)
