@@ -37,7 +37,7 @@ const Bar = Styled.div`
 const Value = Styled.span`
   position: absolute;
   left: 100%;
-  transform: translateX(4px);
+  transform: translate(4px);
   opacity: 0.6;
 `
 const MagnitudeKey = Styled.span`
@@ -45,6 +45,7 @@ const MagnitudeKey = Styled.span`
   left: 0;
   transform: translateX(calc(-100% - 16px));
   opacity: 0.6;
+  font-size: 1.25rem;
 `
 
 const Popup = Styled.div`
@@ -161,7 +162,8 @@ function MagnitudeChart (props) {
               onMouseOut={ e => handleMouseOut(m, e) }
             >
               <Value>{ chartData[`mag__${m}`]?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
-              <MagnitudeKey>{ `${m.toFixed(1)}` }</MagnitudeKey>
+              {/* Only show every other axis key */}
+              { !(i % 2) && <MagnitudeKey>{ `${m.toFixed(1)}` }</MagnitudeKey> }
             </Bar>)
         }
       </BarWrapper>
