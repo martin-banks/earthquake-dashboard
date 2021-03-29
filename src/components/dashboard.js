@@ -7,6 +7,7 @@ import useQuakeData from '../hooks/get-quake-data-hook'
 import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
+import Globe from './globe'
 
 import timelinePosition from '../functions/timline-position'
 import quakeTypes from '../content/quake-types'
@@ -25,19 +26,26 @@ const sharedStyles = css`
   width: 20vw;
 `
 const MainSection = Styled.section`
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr auto;
-`
+  `
 const SectionLeft = Styled.section`
   ${ sharedStyles };
+  background: rgba(0,0,0, 0.5);
+  z-index: 100;
 `
 const SectionRight = Styled.section`
   ${ sharedStyles };
+  background: rgba(0,0,0, 0.5);
   display: grid;
   grid-template-rows: auto 1fr;
+  z-index: 100;
 `
 const SectionBottom = Styled.section`
   padding: 2rem;
+  background: rgba(0,0,0, 0.5);
+  z-index: 100;
 `
 
 const Timeline = Styled.section`
@@ -136,6 +144,7 @@ function Dashboard (props) {
 
   return (
     <Container>
+      <Globe />
       <MainSection>
 
         <SectionLeft>
