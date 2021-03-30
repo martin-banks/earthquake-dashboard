@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Styled from 'styled-components'
 import * as THREE from 'three'
-import { Canvas, useFrame } from 'react-three-fiber'
-// import { softShadows } from 'drei'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { Canvas, useFrame, extend, useThree } from 'react-three-fiber'
+
+import convertLatLong from '../functions/convert-lat-long'
 
 import earthDaymap from '../textures/2k_earth_daymap.jpg'
 
-// softShadows()
+// extend({ OrbitControls })
 
 
 const Container = Styled.section`
@@ -23,76 +25,158 @@ const Container = Styled.section`
 
 
 function Box (props) {
-  return <mesh
-    { ...props }
-    scale={ [1, 1, 1]}
+  const {
+    lat,
+    long,
+    mag,
+  } = props
+
+  const boxRef = useRef()
+  const [ coords, setCoords ] = useState(null)
+  const [ matrix, setMatrix ] = useState(null)
+
+  useEffect(() => {
+    const converted = convertLatLong({ lat, long })
+    setCoords(converted)
+  }, [])
+
+  useEffect(() => {
+    if (!coords) return
+    const childVector = new THREE.Vector3(0, 1, 0)
+    const childMatrix = new THREE.Matrix4()
+      .lookAt(
+        boxRef.current.position,
+        childVector,
+        boxRef.current.up
+      )
+    boxRef.current.quaternion.setFromRotationMatrix(childMatrix)
+    setMatrix(childMatrix)
+
+  }, [ coords ])
+
+  return coords && <mesh
+    ref={ boxRef }
+    // { ...props }
+    scale={ [0.1, 0.1, (mag + 5) * (mag + 5) * 0.05] }
     castShadow
     receiveShadow
+    position={ [coords.x * 5, coords.y * 5, coords.z * 5] }
   >
     <boxGeometry args={ [1, 1, 1] } />
-    <meshStandardMaterial attach="material" color="hotpink" />
+    <meshStandardMaterial
+      attach="material"
+      color="hotpink"
+      opacity="0.5"
+      transparent
+    />
   </mesh>
 }
 
+
 function Sphere (props) {
+  const { quakes } = props
   const mesh = useRef()
 
+  useEffect(() => {
+    if (!quakes) return
+    console.log({ quakes })
+
+  }, [ quakes ])
+
   useFrame(() => {
-    mesh.current.rotation.y = mesh.current.rotation.y += 0.01
+    mesh.current.rotation.y = mesh.current.rotation.y += 0.005
   })
 
   const earthTexture = useMemo(() => new THREE.TextureLoader().load(earthDaymap), [])
 
-  return <mesh
-    { ...props }
-    ref={ mesh }
-    scale={ [1, 1, 1]}
-    castShadow
-    receiveShadow
-  >
-    <sphereGeometry args={ [1, 32, 32] } />
-    <meshStandardMaterial side={ THREE.DoubleSide }  >
-      <primitive attach="map" object={ earthTexture } />
-    </meshStandardMaterial>
+  return <>
+    <mesh
+      { ...props }
+      ref={ mesh }
+      scale={ [1, 1, 1]}
+      castShadow
+      receiveShadow
+    >
+      <sphereGeometry args={ [5, 32, 32] } />
+      <meshStandardMaterial side={ THREE.DoubleSide } >
+        <primitive attach="map" object={ earthTexture } />
+      </meshStandardMaterial>
 
-    <Box position={ [-1, -1, -1] } />
+      { quakes &&
+        quakes.map(q => <Box
+          key={ `quake-3d-box-${q.id}` }
+          lat={ q.geometry.coordinates[1] }
+          long={ q.geometry.coordinates[0] }
+          mag={ q.properties.mag }
+        />)
+      }
 
-  </mesh>
+      <Box />
+
+    </mesh>
+  </>
 }
 
 
+const CameraController = () => {
+  const { camera, gl } = useThree()
+  useEffect(
+    () => {
+      const controls = new OrbitControls(camera, gl.domElement)
+
+      controls.minDistance = 3
+      controls.maxDistance = 20
+      return () => {
+        controls.dispose()
+      }
+    },
+    [camera, gl]
+  )
+  return null
+}
 
 
+function Scene (props) {
+  const { quakes } = props
 
-function Globe () {
-  const [ shadowmap, setShadowmap ] = useState(1024)
+  return <>
+    { quakes && <Sphere position={ [0, 0, 0] } quakes={ quakes } /> }
+
+  </>
+}
+
+
+function Globe (props) {
+  const { quakes } = props
+  const [ shadowmap, setShadowmap ] = useState(512)
+
 
   useEffect(() => {
     setTimeout(() => {
-      setShadowmap(2048)
-    }, 500)
+      setShadowmap(1024)
+    }, 1000)
   }, [])
 
   return <Container>
     <Canvas
       shadowMap
       camera={{
-        position: [0, 0, -5],
+        position: [0, 0, -15],
         fov: 70,
       }}
     >
-      <ambientLight intensity={ 0.05 } />
-      <spotLight
+      {/* <CameraController /> */}
+      <ambientLight intensity={ 0.5 } />
+      {/* <spotLight
         position={ [-20, 20, -20] }
-        angle={0.15}
+        angle={ 0.15 }
         penumbra={ 0.5 }
         castShadow
         shadow-mapSize-height={ shadowmap }
         shadow-mapSize-width={ shadowmap }
-      />
-      {/* <pointLight position={[-20, -20, -20]} /> */}
-      <Sphere position={ [0, 0, 0] } />
-      {/* <Box position={ [-1, -1, -1] } /> */}
+      /> */}
+      {/* <pointLight position={ [-20, -20, -20] } /> */}
+      <Scene quakes={ quakes } />
     </Canvas>
 
   </Container>

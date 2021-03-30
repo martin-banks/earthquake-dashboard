@@ -47,6 +47,12 @@ const SectionBottom = Styled.section`
   background: rgba(0,0,0, 0.5);
   z-index: 100;
 `
+const SectionMain = Styled.section`
+  pointer-events: none;
+  * {
+    pointer-events: none;
+  }
+`
 
 const Timeline = Styled.section`
   position: relative;
@@ -144,7 +150,7 @@ function Dashboard (props) {
 
   return (
     <Container>
-      <Globe />
+      <Globe quakes={ events } />
       <MainSection>
 
         <SectionLeft>
@@ -162,13 +168,13 @@ function Dashboard (props) {
           }
         </SectionLeft>
 
-        <div>
-          {
+        <SectionMain>
+          {/* {
             (events?.length < 1) &&
               <h2>No results found please try adjusting your settings</h2>
-          }
-          <p>This space is a cutout for the globe behind</p>
-          <pre className="dump">
+          } */}
+          {/* <p>This space is a cutout for the globe behind</p> */}
+          {/* <pre className="dump">
             {
               JSON.stringify({
                 // data,
@@ -182,8 +188,8 @@ function Dashboard (props) {
                 // sampleEvent: data?.events?.[0]
               }, null, 2)
             }
-          </pre>
-        </div>
+          </pre> */}
+        </SectionMain>
 
         <SectionRight>
           {
