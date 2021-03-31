@@ -11,6 +11,7 @@ import Globe from './globe'
 
 import timelinePosition from '../functions/timline-position'
 import quakeTypes from '../content/quake-types'
+import magnitudeColor from '../functions/magnitude-color' 
 
 
 const Container = Styled.article`
@@ -62,9 +63,10 @@ const Timeline = Styled.section`
 `
 
 
-function timelineHeight (mag, max) {
-  const height = (((mag + 3) / (max + 3)) * 100)
-  return height
+function timelineHeight (mag) {
+  // const height = (((mag + 3) / (max + 3)) * 100)
+  const height = (((mag + 3) / 13) * 100)
+  return `${height}%`
 }
 
 
@@ -150,7 +152,7 @@ function Dashboard (props) {
 
   return (
     <Container>
-      <Globe quakes={ events } />
+      <Globe quakes={ eventsToRender } />
       <MainSection>
 
         <SectionLeft>
@@ -220,8 +222,9 @@ function Dashboard (props) {
                     to: dateTo,
                     time: e.properties.time,
                   })}%`,
-                  borderColor: `rgba(255, ${200 - ((e.properties.mag + 5) / 20) * 200}, 0, 1)`,
-                  height: `${timelineHeight(e.properties.mag, magnitudeRange.max)}%`,
+                  // borderColor: `rgba(255, ${200 - ((e.properties.mag + 5) / 20) * 200}, 0, 1)`,
+                  borderColor: magnitudeColor({ mag: e.properties.mag }),
+                  height: timelineHeight(e.properties.mag),
 
                 }}
                 key={ `timeline-mark-${i}` }
