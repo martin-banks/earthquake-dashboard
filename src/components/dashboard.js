@@ -91,6 +91,7 @@ function Dashboard (props) {
   const [ eventsToRender, updateEventsToRender ] = useState(null)
   const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
   const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
+  const [ popup, setPopup ] = useState(null)
 
   const [ dateFrom, setDateFrom ] = useState(null)
   const [ dateTo, setDateTo ] = useState(null)
@@ -160,7 +161,7 @@ function Dashboard (props) {
 
   return (
     <Container>
-      <Globe quakes={ eventsToRender } />
+      <Globe quakes={ eventsToRender } setPopup={ setPopup } />
       <MainSection>
 
         <SectionLeft>
@@ -215,8 +216,7 @@ function Dashboard (props) {
 
       <SectionBottom>
         {/* popup details */}
-
-        <PopupDetails />
+        { popup && <PopupDetails /> }
 
         {/* timeline / scrubber */}
         <h3>Timeline of quakes</h3>
