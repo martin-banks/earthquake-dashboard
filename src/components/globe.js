@@ -113,7 +113,6 @@ function Sphere (props) {
       }
 
       <Box />
-
     </mesh>
   </>
 }
