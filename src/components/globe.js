@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, useFrame, extend, useThree } from 'react-three-fiber'
 
 import convertLatLong from '../functions/convert-lat-long'
-
+import magnitudeColor from '../functions/magnitude-color'
 import earthDaymap from '../textures/2k_earth_daymap.jpg'
 
 // extend({ OrbitControls })
@@ -57,7 +57,7 @@ function Box (props) {
   return coords && <mesh
     ref={ boxRef }
     // { ...props }
-    scale={ [0.1, 0.1, (mag + 5) * (mag + 5) * 0.05] }
+    scale={ [0.1, 0.1, Math.pow((mag + 3), 3) * 0.01] }
     castShadow
     receiveShadow
     position={ [coords.x * 5, coords.y * 5, coords.z * 5] }
@@ -65,7 +65,8 @@ function Box (props) {
     <boxGeometry args={ [1, 1, 1] } />
     <meshStandardMaterial
       attach="material"
-      color="hotpink"
+      // color="hotpink"
+      color={ magnitudeColor({ mag })}
       opacity="0.5"
       transparent
     />
