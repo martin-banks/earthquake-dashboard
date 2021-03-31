@@ -13,9 +13,34 @@ const Wrapper = Styled.section`
   }
 `
 
-const Details = Styled.p`
+const Value = Styled.p`
   font-size: 6rem;
 `
+
+const ScaleSlider = Styled.div``
+const Track = Styled.div`
+  position: relative;
+  width: 100%;
+  height: 10px;
+  padding: 2px;
+  border-radius: 10px;
+  background: linear-gradient(to right, red, orange, gold);
+`
+const Marker = Styled.span`
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  left: ${p => p.x}%;
+  top: 0;
+  border-radius: 10px;
+  background: white;
+`
+const Scale = Styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+
 
 function PopupDetails (props) {
   const { event } = props
@@ -30,7 +55,7 @@ function PopupDetails (props) {
       */}
       <div>
         <h4>Date & time</h4>
-        <Details>-- date, time</Details>
+        <Value>-- date, time</Value>
       </div>
 
       {/* Location
@@ -39,7 +64,7 @@ function PopupDetails (props) {
       */}
       <div>
         <h4>Locaiton</h4>
-        <Details>-- location details</Details>
+        <Value>-- location details</Value>
       </div>
 
       {/* Magnitude scale
@@ -55,9 +80,16 @@ function PopupDetails (props) {
         */}
       <div>
         <h4>Magnitude</h4>
-        <Track>
-          <Marker x={ 'calcukate range between -3 and 10' } />
-        </Track>
+        <ScaleSlider>
+          <Track>
+            <Marker x={ (event.properties.mag + 3) / 13 * 100 } />
+          </Track>
+          <Scale>
+            <p>-3</p>
+            <p>10</p>
+          </Scale>
+        </ScaleSlider>
+        <Value>{ event.properties.mag }</Value>
       </div>
 
       {/* Tsunami warning?
@@ -66,7 +98,7 @@ function PopupDetails (props) {
       */}
       <div>
         <h4>Tsunami warning?</h4>
-        <Details>{ event.properties.tsunami ? 'Yes' : 'No' }</Details>
+        <Value>{ event.properties.tsunami ? 'Yes' : 'No' }</Value>
       </div>
 
       {/* Was felt
@@ -75,7 +107,7 @@ function PopupDetails (props) {
       */}
       <div>
         <h4>Was felt?</h4>
-        <Details>{ event.properties.felt ? 'Yes' : 'No' }</Details>
+        <Value>{ event.properties.felt ? 'Yes' : 'No' }</Value>
       </div>
 
     </Wrapper>
