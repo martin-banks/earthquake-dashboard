@@ -30,11 +30,14 @@ const MainSection = Styled.section`
   position: relative;
   display: grid;
   grid-template-columns: auto 1fr auto;
+  pointer-events: none;
   `
 const SectionLeft = Styled.section`
   ${ sharedStyles };
   background: rgba(0,0,0, 0.5);
   z-index: 100;
+  pointer-events: all;
+  backdrop-filter: blur(10px);
 `
 const SectionRight = Styled.section`
   ${ sharedStyles };
@@ -42,11 +45,15 @@ const SectionRight = Styled.section`
   display: grid;
   grid-template-rows: auto 1fr;
   z-index: 100;
+  pointer-events: all;
+  backdrop-filter: blur(10px);
 `
 const SectionBottom = Styled.section`
   padding: 2rem;
   background: rgba(0,0,0, 0.5);
   z-index: 100;
+  pointer-events: all;
+  backdrop-filter: blur(10px);
 `
 const SectionMain = Styled.section`
   pointer-events: none;
