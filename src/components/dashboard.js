@@ -8,6 +8,7 @@ import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
 import Globe from './globe'
+import PopupDetails from '/popup-details'
 
 import timelinePosition from '../functions/timline-position'
 import quakeTypes from '../content/quake-types'
@@ -214,9 +215,12 @@ function Dashboard (props) {
 
       <SectionBottom>
         {/* popup details */}
+
+        <PopupDetails />
+
         {/* timeline / scrubber */}
         <h3>Timeline of quakes</h3>
-        <p>Each mark represents a single quake event</p>
+        {/* <p>Each mark represents a single quake event</p> */}
         <Timeline>
           {/* this position is not calcualting correctly */}
           {
