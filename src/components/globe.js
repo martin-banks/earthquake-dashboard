@@ -85,7 +85,7 @@ function Sphere (props) {
   }, [ quakes ])
 
   useFrame(() => {
-    mesh.current.rotation.y = mesh.current.rotation.y += 0.005
+    // mesh.current.rotation.y = mesh.current.rotation.y += 0.005
   })
 
   const earthTexture = useMemo(() => new THREE.TextureLoader().load(earthDaymap), [])
@@ -125,8 +125,10 @@ const CameraController = () => {
     () => {
       const controls = new OrbitControls(camera, gl.domElement)
 
-      controls.minDistance = 3
+      controls.minDistance = 10
       controls.maxDistance = 20
+      controls.minPolarAngle = Math.PI * -0.5
+      controls.maxPolarAngle = Math.PI * 1
       return () => {
         controls.dispose()
       }
@@ -166,7 +168,7 @@ function Globe (props) {
         fov: 70,
       }}
     >
-      {/* <CameraController /> */}
+      <CameraController />
       <ambientLight intensity={ 0.5 } />
       {/* <spotLight
         position={ [-20, 20, -20] }
