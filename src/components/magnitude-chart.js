@@ -4,6 +4,8 @@ import Styled from 'styled-components'
 
 import mousePositionHook from '../hooks/mouse-position-hook'
 
+import magnitudeColor from '../functions/magnitude-color'
+
 
 const Container = Styled.div`
   display: grid;
@@ -23,7 +25,8 @@ const Bar = Styled.div`
   position: relative;
   display: block;
   height: ${p => 100 / p.total}%;
-  background: rgba(255, ${p => p.index * 200}, 0, 1);
+  /* background: rgba(255, ${p => p.index * 200}, 0, 1); */
+  background: ${p => magnitudeColor({ mag: p.mag })};
   width: ${p => p.width * 100}%;
   cursor: help;
   border-bottom: solid 1px white;
@@ -158,6 +161,7 @@ function MagnitudeChart (props) {
               width={ chartData[`mag__${m}`] / chartRange?.max || 0 }
               total={ arr.length }
               index={ (arr.length - i) / arr.length }
+              mag={ m }
               onMouseOver={ e => handleMouseOver(m, e) }
               onMouseOut={ e => handleMouseOut(m, e) }
             >
