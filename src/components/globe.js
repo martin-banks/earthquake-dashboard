@@ -75,7 +75,10 @@ function Box (props) {
 
 
 function Sphere (props) {
-  const { quakes } = props
+  const {
+    quakes,
+    setPopup,
+  } = props
   const mesh = useRef()
 
   useEffect(() => {
