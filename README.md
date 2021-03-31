@@ -7,14 +7,20 @@ Re-visit of an old project looking at USGS data of all recorded earthquakes arou
 
 Create an interactive dashboard to visualise global earthquake data, it must include:
 
-- Display all events on an interactive globe.
-- Each event on the globe must reflect it's magnitude.
-- Select custom date rate.
-- Display a timeline of all of the events.
-  - Each event should also represent the magnitude.
-- Filter the events by magnitude range.
-- Display a chart of the totals for all of the magnitudes in the range.
-- Filter the events by those that were felt and those that triggered tsunami warnings.
+[] Display all events on an interactive globe.
+  [] Each event on the globe must reflect it's magnitude.
+[] Select custom date rate.
+[] Display a timeline of all of the events.
+  [] Each event should also represent the magnitude.
+[] Filter the events by magnitude range.
+[] Display a chart of the totals for all of the magnitudes in the range.
+[] Filter the events by those that were felt and those that triggered tsunami warnings.
+
+### Bonus points
+
+[] Each quake on the globe can be interacted with with (click/hover) to display it's specific details.
+[] Add a 'play' feature that will add the quakes to the globe sequentially.
+[] Add a scrubber to the timeline to see what quakes have happened at any point
 
 
 ## Tech used
