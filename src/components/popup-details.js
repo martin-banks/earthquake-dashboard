@@ -2,27 +2,47 @@ import React from 'react'
 import Styled from 'styled-components'
 import PropTypes from 'prop-types'
 
+import formatDate from '../functions/format-date-time'
+
 
 const Wrapper = Styled.section`
   display: grid;
   grid-template-columns: auto auto auto auto auto;
+  gap: 1rem;
   border-bottom: solid 1px black;
-  padding: 0 2rem;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
   @media screen and (prefers-color-scheme: dark) {
     border-color: white;
   }
 `
 
+const Kicker = Styled.h4`
+  text-align: center;
+  margin: 0;
+  margin-bottom: 4px;
+`
 const Value = Styled.p`
-  font-size: 6rem;
+  font-size: 4rem;
+  font-family: dharma-gothic-e;
+  font-weight: 300;
+  text-align: center;
+  margin: 0;
 `
 
-const ScaleSlider = Styled.div``
+const MagnitudeGrid = Styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+`
+const ScaleSlider = Styled.div`
+`
 const Track = Styled.div`
   position: relative;
   width: 100%;
   height: 10px;
   padding: 2px;
+  margin-bottom: 4px;
   border-radius: 10px;
   background: linear-gradient(to right, red, orange, gold);
 `
@@ -31,13 +51,17 @@ const Marker = Styled.span`
   height: 8px;
   width: 8px;
   left: ${p => p.x}%;
-  top: 0;
+  top: 1px;
   border-radius: 10px;
   background: white;
+  box-shadow: 0 2px 4px black;
 `
 const Scale = Styled.div`
   display: flex;
   justify-content: space-between;
+  p {
+    margin: 0;
+  }
 `
 
 
@@ -54,8 +78,9 @@ function PopupDetails (props) {
         |- date, time (include time zone)
       */}
       <div>
-        <h4>Date & time</h4>
-        <Value>-- date, time</Value>
+        <Kicker>Date & time</Kicker>
+        {/* <Value>{ JSON.stringify(new Date(event.properties.time)) }</Value> */}
+        <Value>{ formatDate(event.properties.time) }</Value>
       </div>
 
       {/* Location
@@ -63,8 +88,8 @@ function PopupDetails (props) {
         |- location 
       */}
       <div>
-        <h4>Locaiton</h4>
-        <Value>-- location details</Value>
+        <Kicker>Locaiton</Kicker>
+        <Value>{ event.properties.place }</Value>
       </div>
 
       {/* Magnitude scale
@@ -79,17 +104,19 @@ function PopupDetails (props) {
           |- magnitude number
         */}
       <div>
-        <h4>Magnitude</h4>
-        <ScaleSlider>
-          <Track>
-            <Marker x={ (event.properties.mag + 3) / 13 * 100 } />
-          </Track>
-          <Scale>
-            <p>-3</p>
-            <p>10</p>
-          </Scale>
-        </ScaleSlider>
-        <Value>{ event.properties.mag }</Value>
+        <Kicker>Magnitude</Kicker>
+        <MagnitudeGrid>
+          <ScaleSlider>
+            <Track>
+              <Marker x={ (event.properties.mag + 3) / 13 * 100 } />
+            </Track>
+            <Scale>
+              <p>-3</p>
+              <p>10</p>
+            </Scale>
+          </ScaleSlider>
+          <Value>{ event.properties.mag }</Value>
+        </MagnitudeGrid>
       </div>
 
       {/* Tsunami warning?
@@ -97,7 +124,7 @@ function PopupDetails (props) {
         |- yes/no
       */}
       <div>
-        <h4>Tsunami warning?</h4>
+        <Kicker>Tsunami warning?</Kicker>
         <Value>{ event.properties.tsunami ? 'Yes' : 'No' }</Value>
       </div>
 
@@ -106,7 +133,7 @@ function PopupDetails (props) {
         |- yes/no
       */}
       <div>
-        <h4>Was felt?</h4>
+        <Kicker>Was felt?</Kicker>
         <Value>{ event.properties.felt ? 'Yes' : 'No' }</Value>
       </div>
 
