@@ -8,7 +8,7 @@ import QuakeTotals from './quake-totals'
 import MagnitudeChart from './magnitude-chart'
 import DashboardSettings from './dashboard-settings'
 import Globe from './globe'
-import PopupDetails from '/popup-details'
+import PopupDetails from './popup-details'
 
 import timelinePosition from '../functions/timline-position'
 import quakeTypes from '../content/quake-types'
@@ -106,6 +106,11 @@ function Dashboard (props) {
   } = useQuakeData()
 
   useEffect(() => {
+    if (!eventsToRender) return
+    setPopup(eventsToRender[Math.round(Math.random() * eventsToRender.length - 1)])
+  }, [ eventsToRender ])
+
+  useEffect(() => {
     setDateFrom(dates.start.getTime())
     setDateTo(dates.end.getTime())
   }, [ dates ])
@@ -188,14 +193,15 @@ function Dashboard (props) {
           {/* <pre className="dump">
             {
               JSON.stringify({
+                // popup,
                 // data,
                 // events
-                keys: data && Object.keys(data),
-                dates,
-                felt: data?.felt?.length,
-                tsunami: data?.tsunami?.length,
-                events: data?.events?.length,
-                magnitudeRange,
+                // keys: data && Object.keys(data),
+                // dates,
+                // felt: data?.felt?.length,
+                // tsunami: data?.tsunami?.length,
+                // events: data?.events?.length,
+                // magnitudeRange,
                 // sampleEvent: data?.events?.[0]
               }, null, 2)
             }
@@ -216,7 +222,7 @@ function Dashboard (props) {
 
       <SectionBottom>
         {/* popup details */}
-        { popup && <PopupDetails /> }
+        { popup && <PopupDetails event={ popup } /> }
 
         {/* timeline / scrubber */}
         <h3>Timeline of quakes</h3>
