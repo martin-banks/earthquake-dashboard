@@ -63,7 +63,7 @@ function Box (props) {
     position={ [coords.x * 5, coords.y * 5, coords.z * 5] }
   >
     <boxGeometry args={ [1, 1, 1] } />
-    <meshStandardMaterial
+    <meshPhongMaterial
       attach="material"
       // color="hotpink"
       color={ magnitudeColor({ mag })}
@@ -123,20 +123,17 @@ function Sphere (props) {
 
 const CameraController = () => {
   const { camera, gl } = useThree()
-  useEffect(
-    () => {
-      const controls = new OrbitControls(camera, gl.domElement)
+  useEffect(() => {
+    const controls = new OrbitControls(camera, gl.domElement)
 
-      controls.minDistance = 10
-      controls.maxDistance = 20
-      controls.minPolarAngle = Math.PI * -0.5
-      controls.maxPolarAngle = Math.PI * 1
-      return () => {
-        controls.dispose()
-      }
-    },
-    [camera, gl]
-  )
+    controls.minDistance = 10
+    controls.maxDistance = 20
+    controls.minPolarAngle = Math.PI * -0.5
+    controls.maxPolarAngle = Math.PI * 1
+    return () => {
+      controls.dispose()
+    }
+  },[camera, gl])
   return null
 }
 
