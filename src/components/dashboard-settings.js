@@ -72,9 +72,30 @@ const QuakeTypeLabel = Styled.p`
 
 
 function DashboardSettings (props) {
+
+  // ! Data required
+
+  // ? props
+  // - range of mags in data set
+  // - current range of mags rendered
+
+  
+  
+  // ? state
+  // - lowest mag to render
+  // - highest mag to render
+  // 
+
+
   const {
     magnitudeRange,
     updateMagnitudeRange,
+    setMagnitudesToRender,
+
+    dataMagRange,
+    renderedMagRange,
+    setRenderedMagRange,
+
     quakeTypes,
     updateTypeToShow,
     dates,
@@ -84,7 +105,10 @@ function DashboardSettings (props) {
   } = props
 
   const [ showType, setShowType ] = useState(0)
+
   const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
+
+  // Active min and max values of the magnitude input
   const [ min, updateMin ] = useState(0)
   const [ max, updateMax ] = useState(0)
   const [ dateFrom, setDateFrom ] = useState(null)
@@ -110,6 +134,40 @@ function DashboardSettings (props) {
     updateMin(magnitudeRange.min)
     updateMax(magnitudeRange.max)
   }, [ dates ])
+
+
+  useEffect(() => {
+    updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+    updateMin(magnitudeRange.min)
+    updateMax(magnitudeRange.max)
+  }, [ magnitudeRange ])
+
+
+  useEffect(() => {
+    // the range of the whole dataset could haven changed
+    // fully reset all magnitude settings
+
+    // Values used for the min and max handles on the input slider
+    // updateMin(dataMagRange.min)
+    // updateMax(dataMagRange.max)
+
+    // Max and min values used as the limitrs of the range slider
+    // updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+
+  }, [ dataMagRange ])
+
+  useEffect(() => {
+    // Range of magnitudes avaialable for render has changed
+    // reset ONLY range settings
+
+    // Values used for the min and max handles on the input slider
+    // updateMin(renderedMagRange.min)
+    // updateMax(renderedMagRange.max)
+
+    // Max and min values used as the limitrs of the range slider
+    // updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+
+  }, [ renderedMagRange ])
 
 
 
@@ -162,19 +220,20 @@ function DashboardSettings (props) {
       <h3>Magnitude range</h3>
       <InputRange
         draggableTrack
-        minValue={ rangeToUse.min }
-        maxValue={ rangeToUse.max }
+        minValue={ dataMagRange.min }
+        maxValue={ dataMagRange.max }
         step={ 0.1 }
-        value={{ min, max }}
+        value={ {min, max} }
         formatLabel={ value => value.toFixed(1) }
         onChange={ x => {
           updateMin(x.min)
           updateMax(x.max)
-        }}
+        } }
         onChangeComplete={ x => {
           console.log('values from input range', x.min, x.max)
           updateMagnitudeRange({ min: x.min, max: x.max })
-        }}
+          // setMagnitudesToRender({ min: x.min, max: x.max })
+        } }
       />
     </Section>
 
@@ -209,6 +268,7 @@ function DashboardSettings (props) {
 
 
 DashboardSettings.propTypes = {
+  // The magnitudeRange is the range of the magnitudes of the events to render
   magnitudeRange: PropTypes.object.isRequired,
   updateMagnitudeRange: PropTypes.func.isRequired,
   quakeTypes: PropTypes.array.isRequired,

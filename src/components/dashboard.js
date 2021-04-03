@@ -88,6 +88,10 @@ function Dashboard (props) {
   } = props
 
   const [ magnitudeRange, updateMagnitudeRange ] = useState(null)
+
+  const [ dataMagRange, setDataMagRange ] = useState(null)
+  const [ renderedMagRange, setRenderedMagRange ] = useState(null)
+
   const [ eventsToRender, updateEventsToRender ] = useState(null)
   const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
   const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
@@ -128,6 +132,9 @@ function Dashboard (props) {
     const max = Math.max(...magnitudes)
 
     updateMagnitudeRange({ min, max })
+
+    setDataMagRange({ min, max })
+    setRenderedMagRange({ min, max })
   }, [ data ])
 
 
@@ -152,7 +159,7 @@ function Dashboard (props) {
     })
 
     updateEventsToRender(updatedData[typeToShow.type])
-  }, [ data, magnitudeRange, typeToShow ])
+  }, [ data, magnitudeRange, renderedMagRange, typeToShow ])
 
   useEffect(() => {
     setLoading(loading)
@@ -175,6 +182,11 @@ function Dashboard (props) {
               <DashboardSettings
                 magnitudeRange={ magnitudeRange }
                 updateMagnitudeRange={ updateMagnitudeRange }
+
+                dataMagRange={ dataMagRange }
+                renderedMagRange={ renderedMagRange }
+                setRenderedMagRange={ setRenderedMagRange }
+
                 quakeTypes={ quakeTypes }
                 updateTypeToShow={ updateTypeToShow }
                 dateRange={ data.dateRange }
