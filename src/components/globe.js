@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Styled from 'styled-components'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, useFrame, extend, useThree } from 'react-three-fiber'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { Canvas, useFrame, useThree } from 'react-three-fiber'
 
 import convertLatLong from '../functions/convert-lat-long'
 import magnitudeColor from '../functions/magnitude-color'
 import earthDaymap from '../textures/2k_earth_daymap.jpg'
 
-// extend({ OrbitControls })
+import Effects from './quake-effects'
 
 
 const Container = Styled.section`
@@ -57,18 +60,23 @@ function Box (props) {
   return coords && <mesh
     ref={ boxRef }
     // { ...props }
-    scale={ [0.1, 0.1, Math.pow((mag + 3), 3) * 0.01] }
+    scale={ [0.05, 0.05, Math.pow(mag + 3, 3) * 0.008 ]} // Math.pow((mag + 3), 3) * 0.01] }
     castShadow
     receiveShadow
-    position={ [coords.x * 5, coords.y * 5, coords.z * 5] }
+    position={ [
+      (coords.x * 5),
+      (coords.y * 5),
+      (coords.z * 5),
+    ] }
   >
     <boxGeometry args={ [1, 1, 1] } />
-    <meshPhongMaterial
+    <meshLambertMaterial
       attach="material"
-      // color="hotpink"
-      color={ magnitudeColor({ mag })}
-      opacity="0.5"
+      color={ magnitudeColor({ mag }) }
+      // color="white"
+      opacity={ ((mag + 3) / 13) * 0.4 }
       transparent
+      emissive={ magnitudeColor({ mag }) }
     />
   </mesh>
 }
@@ -102,17 +110,21 @@ function Sphere (props) {
       receiveShadow
     >
       <sphereGeometry args={ [5, 32, 32] } />
-      <meshStandardMaterial side={ THREE.DoubleSide } >
+      <meshLambertMaterial
+        side={ THREE.DoubleSide }
+        color="#888"
+        emissive="#111"
+      >
         <primitive attach="map" object={ earthTexture } />
-      </meshStandardMaterial>
+      </meshLambertMaterial>
 
       { quakes &&
-        quakes.map(q => <Box
-          key={ `quake-3d-box-${q.id}` }
-          lat={ q.geometry.coordinates[1] }
-          long={ q.geometry.coordinates[0] }
-          mag={ q.properties.mag }
-        />)
+          quakes.map(q => <Box
+            key={ `quake-3d-box-${q.id}` }
+            lat={ q.geometry.coordinates[1] }
+            long={ q.geometry.coordinates[0] }
+            mag={ q.properties.mag }
+          />)
       }
 
       <Box />
@@ -143,15 +155,15 @@ function Scene (props) {
 
   return <>
     { quakes && <Sphere position={ [0, 0, 0] } quakes={ quakes } /> }
-
   </>
 }
+
+
 
 
 function Globe (props) {
   const { quakes } = props
   const [ shadowmap, setShadowmap ] = useState(512)
-
 
   useEffect(() => {
     setTimeout(() => {
@@ -163,12 +175,12 @@ function Globe (props) {
     <Canvas
       shadowMap
       camera={{
-        position: [0, 0, -15],
+        position: [0, 0, -20],
         fov: 70,
       }}
     >
       <CameraController />
-      <ambientLight intensity={ 0.5 } />
+      <ambientLight intensity={ 0.4 } />
       {/* <spotLight
         position={ [-20, 20, -20] }
         angle={ 0.15 }
@@ -179,6 +191,7 @@ function Globe (props) {
       /> */}
       {/* <pointLight position={ [-20, -20, -20] } /> */}
       <Scene quakes={ quakes } />
+      <Effects />
     </Canvas>
 
   </Container>
