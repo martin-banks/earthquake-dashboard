@@ -7,7 +7,7 @@
 // th is used for all other numbers (e.g. 9th, pronounced ninth).
 
 export default function (number) {
-  const numbers = number.toString().split()
+  const numbers = number.toString().split('')
   const lastNumber = numbers[numbers.length - 1]
 
   let ordinal = null
@@ -23,9 +23,6 @@ export default function (number) {
   } else {
     ordinal = 'th'
   }
-
-  console.log({ ordinal })
-
 
   return `${number}${ordinal}`
 
