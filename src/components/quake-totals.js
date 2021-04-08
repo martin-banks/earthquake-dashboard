@@ -6,11 +6,16 @@ import Styled from 'styled-components'
 const Container = Styled.div`
   display: flex;
   flex-wrap: wrap;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: solid 1px rgba(100, 100, 100, 0.5);
 `
 const StatFull = Styled.div`
   flex: 1 1 0;
   width: 100%;
   min-width: 100%;
+  margin-bottom: 3rem;
 `
 const StatHalf = Styled.div`
   flex: 1 1 0;
