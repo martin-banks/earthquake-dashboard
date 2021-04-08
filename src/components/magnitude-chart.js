@@ -25,7 +25,6 @@ const Bar = Styled.div`
   position: relative;
   display: block;
   height: ${p => 100 / p.total}%;
-  /* background: rgba(255, ${p => p.index * 200}, 0, 1); */
   background: ${p => magnitudeColor({ mag: p.mag })};
   width: ${p => p.width * 100}%;
   cursor: help;
@@ -55,7 +54,7 @@ const Popup = Styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  transform: translate3d(${p => p.coords.x}px, ${p => p.coords.y}px, 0);
+  transform: translate3d(-90%, calc(${p => p.coords.y}px - 50%), 0);
   padding: 16px;
   border-radius: 4px;
   background: rgba(0,0,0, 0.8);
@@ -65,6 +64,7 @@ const Popup = Styled.div`
     margin: 0;
   }
   pointer-events: none;
+  z-index: 999;
 `
 
 
@@ -137,13 +137,18 @@ function MagnitudeChart (props) {
 
 
   const handleMouseOver = (magKey, e) => {
-    updatePopupInfo(prev => ({
+    console.log('mouse over', magKey)
+    // updatePopupInfo(prev => ({
+    //   magnitude: magKey,
+    //   count: chartData[`mag__${magKey}`]
+    // }))
+    updatePopupInfo({
       magnitude: magKey,
-      count: chartData?.[`mag__${magKey}`]
-    }))
+      count: chartData[`mag__${magKey}`],
+    })
   }
   const handleMouseOut = magKey => {
-    updatePopupInfo(null)
+    // updatePopupInfo(null)
   }
 
   return <Container>
@@ -163,6 +168,7 @@ function MagnitudeChart (props) {
               index={ (arr.length - i) / arr.length }
               mag={ m }
               onMouseOver={ e => handleMouseOver(m, e) }
+              onClick={ e => handleMouseOver(m, e) }
               onMouseOut={ e => handleMouseOut(m, e) }
             >
               <Value>{ chartData[`mag__${m}`]?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</Value>
@@ -174,7 +180,7 @@ function MagnitudeChart (props) {
     {/* </div> */}
 
 
-    { popupInfo && <Popup coords={ mouseCoords }>
+    { popupInfo && <Popup coords={ { x: mouseCoords.x, y: mouseCoords.y} }>
         <h6>Magnitude: { popupInfo?.magnitude }</h6>
         <h4>Events: { popupInfo?.count }</h4>
       </Popup>
