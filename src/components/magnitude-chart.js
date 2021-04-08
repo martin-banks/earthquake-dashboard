@@ -148,7 +148,7 @@ function MagnitudeChart (props) {
     })
   }
   const handleMouseOut = magKey => {
-    // updatePopupInfo(null)
+    updatePopupInfo(null)
   }
 
   return <Container>
