@@ -9,7 +9,10 @@ import { Canvas, useFrame, useThree } from 'react-three-fiber'
 
 import convertLatLong from '../functions/convert-lat-long'
 import magnitudeColor from '../functions/magnitude-color'
-import earthDaymap from '../textures/2k_earth_daymap.jpg'
+
+// import earthDaymap from '../textures/2k_earth_daymap.jpg'
+import earthDaymap from '../textures/8081_earthmap2k.jpg'
+import earthBumpMap from '../textures/8081_earthbump4k.jpg'
 
 import Effects from './quake-effects'
 
@@ -100,6 +103,7 @@ function Sphere (props) {
   })
 
   const earthTexture = useMemo(() => new THREE.TextureLoader().load(earthDaymap), [])
+  const earthBump = useMemo(() => new THREE.TextureLoader().load(earthBumpMap), [])
 
   return <>
     <mesh
@@ -109,14 +113,22 @@ function Sphere (props) {
       castShadow
       receiveShadow
     >
-      <sphereGeometry args={ [5, 32, 32] } />
-      <meshLambertMaterial
-        side={ THREE.DoubleSide }
+      <sphereGeometry args={ [5, 500, 500] } />
+      <meshStandardMaterial
+        // side={ THREE.DoubleSide }
         color="#888"
-        emissive="#111"
+        // emissive="#888"
+        displacementMap={ earthBump }
+        map={ earthTexture }
+        displacementScale={ 0.2 }
+        metalness={ 0.1 }
+        roughness={ 1 }
+        castShadow
+        receiveShadow
       >
-        <primitive attach="map" object={ earthTexture } />
-      </meshLambertMaterial>
+        {/* <primitive attach="map" object={ earthTexture } /> */}
+        {/* <primitive attach="displacementMap" displacementScale={0.1} object={ earthBump } /> */}
+      </meshStandardMaterial>
 
       { quakes &&
           quakes.map(q => <Box
@@ -138,8 +150,8 @@ const CameraController = () => {
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement)
 
-    controls.minDistance = 10
-    controls.maxDistance = 20
+    controls.minDistance = 15
+    controls.maxDistance = 30
     controls.minPolarAngle = Math.PI * -0.5
     controls.maxPolarAngle = Math.PI * 1
     return () => {
@@ -159,6 +171,15 @@ function Scene (props) {
 }
 
 
+function Camera (props) {
+  const ref = useRef()
+  const { setDefaultCamera } = useThree()
+  useEffect(() => void setDefaultCamera(ref.current), [])
+  useFrame(() => ref.current.updateMatrixWorld())
+
+  return <perspectiveCamera ref={ref} {...props} />
+}
+
 
 
 function Globe (props) {
@@ -174,13 +195,44 @@ function Globe (props) {
   return <Container>
     <Canvas
       shadowMap
-      camera={{
-        position: [0, 0, -20],
-        fov: 70,
-      }}
+      // camera={{
+      //   position: [0, 0, -20],
+      //   fov: 70,
+      // }}
     >
+      <Camera
+        position={ [0, 0, -20] }
+      >
+        <pointLight
+          position={ [0, 20, 5] }
+          color="#fff"
+          intensity={ 1 }
+          castShadow
+          shadow-mapSize-height={ shadowmap }
+          shadow-mapSize-width={ shadowmap }
+        />
+        <pointLight
+          position={ [0, -50, 0] }
+          color="white"
+          intensity={ 0.6 }
+          castShadow
+          shadow-mapSize-height={ shadowmap }
+          shadow-mapSize-width={ shadowmap }
+        />
+
+        {/* <spotLight
+          position={ [0, 20, -0] }
+          intensity={ 1.0 }
+          // angle={ 0.5 }
+          penumbra={ 1 }
+          castShadow
+          shadow-mapSize-height={ shadowmap }
+          shadow-mapSize-width={ shadowmap }
+        /> */}
+      </Camera>
       <CameraController />
-      <ambientLight intensity={ 0.4 } />
+      <ambientLight intensity={ 0.2 } />
+      {/* <pointLight position={ [-50, -50, -50] } /> */}
       {/* <spotLight
         position={ [-20, 20, -20] }
         angle={ 0.15 }
@@ -189,7 +241,6 @@ function Globe (props) {
         shadow-mapSize-height={ shadowmap }
         shadow-mapSize-width={ shadowmap }
       /> */}
-      {/* <pointLight position={ [-20, -20, -20] } /> */}
       <Scene quakes={ quakes } />
       <Effects />
     </Canvas>
