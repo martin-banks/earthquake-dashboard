@@ -263,9 +263,9 @@ hr {
   left: -50%;
   position: relative;
 }
-  .input-range__label--max .input-range__label-container {
-    left: 50%;
-  }
+.input-range__label--max .input-range__label-container {
+  left: 50%;
+}
 
 .input-range__track {
   background: #888;
@@ -283,10 +283,7 @@ hr {
 
 .input-range__track--background {
   left: 0;
-  /* margin-top: -2rem; */
-  /* position: absolute; */
   right: 0;
-  /* top: 50%; */
 }
 
 .input-range__track--active {
@@ -297,5 +294,26 @@ hr {
   height: 1rem;
   position: relative;
   width: 100%;
+}
+
+button {
+  transition: all 0.4s;
+  font-size: 2rem;
+  padding: 1.5rem 3rem;
+  border-radius: 2px;
+  border: solid 1px rgba(0,0,0, 0.5);
+  background-color: rgba(100, 0, 0, 0.3);
+  color: black;
+  cursor: pointer;
+}
+button:hover {
+  background-color: rgba(100, 0, 0, 1);
+  color: white;
+}
+@media screen and (prefers-color-scheme: dark) {
+  button {
+    border-color: rgba(200,200,200, 0.5);
+    color: white;
+  }
 }
 
