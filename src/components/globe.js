@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Styled from 'styled-components'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+// import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { Canvas, useFrame, useThree } from 'react-three-fiber'
 
 import convertLatLong from '../functions/convert-lat-long'
@@ -30,16 +30,25 @@ const Container = Styled.section`
 `
 
 
-function Box (props) {
+function Quake (props) {
   const {
     lat,
     long,
     mag,
+    activeId,
+    emitActive,
+    event,
   } = props
 
   const boxRef = useRef()
   const [ coords, setCoords ] = useState(null)
   const [ matrix, setMatrix ] = useState(null)
+  const [ color, setColor ] = useState('#fff')
+  const [ opacity, setOpacity ] = useState(0.1)
+
+  useEffect(() => {
+    setColor(magnitudeColor({ mag }))
+  }, [ mag ])
 
   useEffect(() => {
     const converted = convertLatLong({ lat, long })
@@ -57,8 +66,22 @@ function Box (props) {
       )
     boxRef.current.quaternion.setFromRotationMatrix(childMatrix)
     setMatrix(childMatrix)
-
   }, [ coords ])
+
+  useEffect(() => {
+    if (activeId === event.id) {
+      setColor('cyan')
+      setOpacity(1)
+    } else {
+      setColor(magnitudeColor({ mag }))
+      setOpacity(0.2)
+    }
+  }, [ activeId ])
+
+  const handleClick = () => {
+    if (event.id === activeId) return
+    emitActive(event.id)
+  }
 
   return coords && <mesh
     ref={ boxRef }
@@ -71,15 +94,16 @@ function Box (props) {
       (coords.y * 5),
       (coords.z * 5),
     ] }
+    onClick={ handleClick }
+    // onPointerEnter={ handleClick }
   >
     <boxGeometry args={ [1, 1, 1] } />
     <meshLambertMaterial
       attach="material"
-      color={ magnitudeColor({ mag }) }
-      // color="white"
-      opacity={ ((mag + 3) / 13) * 0.4 }
+      color={ color }
+      opacity={ opacity }
       transparent
-      emissive={ magnitudeColor({ mag }) }
+      emissive={ color }
     />
   </mesh>
 }
@@ -89,6 +113,8 @@ function Sphere (props) {
   const {
     quakes,
     setPopup,
+    activeId,
+    setActiveId,
   } = props
   const mesh = useRef()
 
@@ -112,6 +138,7 @@ function Sphere (props) {
       scale={ [1, 1, 1]}
       castShadow
       receiveShadow
+      onPointerMove={ () => null }
     >
       <sphereGeometry args={ [5, 500, 500] } />
       <meshStandardMaterial
@@ -131,15 +158,18 @@ function Sphere (props) {
       </meshStandardMaterial>
 
       { quakes &&
-          quakes.map(q => <Box
+          quakes.map(q => <Quake
             key={ `quake-3d-box-${q.id}` }
             lat={ q.geometry.coordinates[1] }
             long={ q.geometry.coordinates[0] }
             mag={ q.properties.mag }
+            activeId={ activeId }
+            emitActive={ setActiveId }
+            event={ q }
           />)
       }
 
-      <Box />
+      {/* <Box /> */}
     </mesh>
   </>
 }
@@ -163,10 +193,20 @@ const CameraController = () => {
 
 
 function Scene (props) {
-  const { quakes } = props
+  const {
+    quakes,
+    activeId,
+    setActiveId,
+  } = props
 
   return <>
-    { quakes && <Sphere position={ [0, 0, 0] } quakes={ quakes } /> }
+    { quakes && <Sphere
+        position={ [0, 0, 0] }
+        quakes={ quakes }
+        activeId={ activeId }
+        setActiveId={ setActiveId }
+      />
+    }
   </>
 }
 
@@ -183,7 +223,11 @@ function Camera (props) {
 
 
 function Globe (props) {
-  const { quakes } = props
+  const {
+    quakes,
+    activeId,
+    setActiveId,
+  } = props
   const [ shadowmap, setShadowmap ] = useState(512)
 
   useEffect(() => {
@@ -201,7 +245,7 @@ function Globe (props) {
       // }}
     >
       <Camera
-        position={ [0, 0, -20] }
+        position={ [0, -5, -20] }
       >
         <pointLight
           position={ [0, 20, 5] }
@@ -241,7 +285,11 @@ function Globe (props) {
         shadow-mapSize-height={ shadowmap }
         shadow-mapSize-width={ shadowmap }
       /> */}
-      <Scene quakes={ quakes } />
+      <Scene
+        quakes={ quakes }
+        activeId={ activeId }
+        setActiveId={ setActiveId }
+      />
       <Effects />
     </Canvas>
 
