@@ -7,13 +7,14 @@ import formatDate from '../functions/format-date-time'
 
 const Wrapper = Styled.section`
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  gap: 1rem;
-  border-bottom: solid 1px black;
-  padding: 2rem 0;
+  grid-template-columns: 250px 250px auto 200px 200px;
+  gap: 4rem;
+  border-bottom: solid 1px rgba(0,0,0, 0.4);
+  padding: 0;
+  padding-bottom: 2rem;
   margin-bottom: 2rem;
   @media screen and (prefers-color-scheme: dark) {
-    border-color: white;
+    border-color: rgba(200,200,200, 0.4);
   }
 `
 
@@ -44,9 +45,10 @@ const Track = Styled.div`
   padding: 2px;
   margin-bottom: 4px;
   border-radius: 10px;
-  background: linear-gradient(to right, red, orange, gold);
+  background: linear-gradient(to left, red, orange, gold);
 `
 const Marker = Styled.span`
+  transition: left 300ms;
   position: absolute;
   height: 8px;
   width: 8px;
@@ -115,7 +117,7 @@ function PopupDetails (props) {
               <p>10</p>
             </Scale>
           </ScaleSlider>
-          <Value>{ event.properties.mag }</Value>
+          <Value>{ event.properties.mag.toFixed(2) }</Value>
         </MagnitudeGrid>
       </div>
 
