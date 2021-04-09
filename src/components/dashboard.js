@@ -17,10 +17,9 @@ import magnitudeColor from '../functions/magnitude-color'
 
 const Container = Styled.article`
   display: grid;
-  grid-template-rows: auto 200px;
-  height: 100vh;
+  grid-template-rows: 1fr auto;
+  height: 95vh;
   z-index: 100;
-  outline: solid 1px lime;
   margin: 0;
 `
 const sharedStyles = css`
@@ -69,6 +68,9 @@ const Timeline = Styled.section`
   width: 100%;
   height: 50px;
 `
+const TimelineTitle = Styled.h3`
+  margin-bottom: 0;
+`
 
 
 function timelineHeight (mag) {
@@ -94,11 +96,13 @@ function Dashboard (props) {
 
   const [ eventsToRender, updateEventsToRender ] = useState(null)
   const [ typeToShow, updateTypeToShow ] = useState(quakeTypes[0])
-  const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0, })
+  const [ totals, updateTotals ] = useState({ all: 0, felt: 0, tsunami: 0 })
   const [ popup, setPopup ] = useState(null)
 
   const [ dateFrom, setDateFrom ] = useState(null)
   const [ dateTo, setDateTo ] = useState(null)
+
+  const [ activeId, setActiveId ] = useState(null)
 
   const {
     data,
@@ -111,13 +115,18 @@ function Dashboard (props) {
 
   useEffect(() => {
     if (!eventsToRender) return
-    setPopup(eventsToRender[Math.round(Math.random() * eventsToRender.length - 1)])
   }, [ eventsToRender ])
 
   useEffect(() => {
     setDateFrom(dates.start.getTime())
     setDateTo(dates.end.getTime())
   }, [ dates ])
+
+  useEffect(() => {
+    if (!activeId) return
+    const activeEvent = eventsToRender.find(e => e.id === activeId)
+    setPopup(activeEvent)
+  }, [ activeId ])
 
 
   useEffect(() => {
@@ -173,7 +182,12 @@ function Dashboard (props) {
 
   return (
     <Container>
-      <Globe quakes={ eventsToRender } setPopup={ setPopup } />
+      <Globe
+        quakes={ eventsToRender }
+        setPopup={ setPopup }
+        activeId={ activeId }
+        setActiveId={ setActiveId }
+      />
       <MainSection>
 
         <SectionLeft>
@@ -205,6 +219,7 @@ function Dashboard (props) {
           {/* <pre className="dump">
             {
               JSON.stringify({
+                activeId
                 // popup,
                 // data,
                 // events
@@ -237,7 +252,7 @@ function Dashboard (props) {
         { popup && <PopupDetails event={ popup } /> }
 
         {/* timeline / scrubber */}
-        <h3>Timeline of quakes</h3>
+        <TimelineTitle>Timeline of quakes</TimelineTitle>
         {/* <p>Each mark represents a single quake event</p> */}
         <Timeline>
           {/* this position is not calcualting correctly */}
