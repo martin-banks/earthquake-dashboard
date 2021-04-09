@@ -6,7 +6,7 @@ import formatDate from '../functions/format-input-date'
 const initialEndDate = new Date()
 initialEndDate.setUTCHours(0, 0, 0, 0)
 
-const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 7))
+const initialStartDate = new Date(new Date().setDate(initialEndDate.getDate() - 1))
 initialStartDate.setUTCHours(0, 0, 0, 0)
 
 
