@@ -22,6 +22,12 @@ const Footer = Styled.footer`
   text-align: center;
   /* width: 100%; */
   z-index: 0;
+  background: rgba(255,255,255, 0.8);
+  border-color: rgba(0,0,0, 0.15);
+  @media (prefers-color-scheme: dark) {
+    background: rgba(0,0,0, 0.8);
+    border-color: rgba(255,255,255, 0.2);
+  };
   p {
     display: block;
     font-size: 1.5rem;
@@ -29,13 +35,6 @@ const Footer = Styled.footer`
     padding: 0;
     text-align: center;
     width: 100%;
-  };
-
-  background: rgba(255,255,255, 0.8);
-  border-color: rgba(0,0,0, 0.15);
-  @media (prefers-color-scheme: dark) {
-    background: rgba(0,0,0, 0.8);
-    border-color: rgba(255,255,255, 0.2);
   };
 `
 
@@ -82,7 +81,7 @@ const backgroundCommon = css`
   position: absolute;
   top: 0;
   left: 0;
-  /* width: 100%; */
+  width: 100%;
   height: 100%;
   z-index: 0;
   pointer-events: none;
@@ -95,6 +94,7 @@ const FooterBackground = Styled.div`
 
 const Background = Styled.div`
   position: absolute;
+  display: block;
   top: 0;
   left: 0;
   width: 100%;
@@ -103,6 +103,9 @@ const Background = Styled.div`
   background: ${p => p.background};
   opacity: ${p => p.active ? 1 : 0};
   color: white;
+  &:before {
+    content: 'background color'
+  }
 `
 
 const FooterBackgroundFade = Styled.div`
@@ -128,7 +131,6 @@ const SignatureWrapper = Styled.div`
   width: 200px;
   align-self: center;
   margin: 0;
-  /* margin-bottom: 1rem; */
   transform: translateX(40%);
 `
 
@@ -138,7 +140,7 @@ const Copyright = Styled.p`
 `
 
 export default props => {
-  const [activeSocial, setActiveSocial ] = useState(null)
+  const [ activeSocial, setActiveSocial ] = useState(null)
   const [ socialIcons, storeIcon ] = useState({})
   const [ isHovering, setIsHovering ] = useState(false)
 
@@ -197,8 +199,6 @@ export default props => {
             <Signature />
           </SignatureWrapper>
 
-          {/* <Subtitle></Subtitle> */}
-
           {/* Social links */}
           <Socials>{
             data.socials.edges.map(({ node }, i) => !node.active ? null
@@ -210,11 +210,11 @@ export default props => {
                   onMouseEnter={ () => {
                     setActiveSocial(node.name)
                     setIsHovering(true)
-                  }}
+                  } }
                   onMouseLeave={ () => {
                     setActiveSocial(null)
                     setIsHovering(false)
-                  }}
+                  } }
                   active={ node.name === activeSocial }
                   isHovering={ isHovering }
                 >
