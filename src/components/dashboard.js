@@ -72,14 +72,12 @@ const TimelineTitle = Styled.h3`
   margin-bottom: 0;
 `
 const TimelineMarkWrapper = Styled.div`
-  /* outline: solid 1px lime; */
   display: block;
   position: relative;
   height: 50px;
   margin-bottom: 2px;
 `
 const TimelineDateWrapper = Styled.ul`
-  /* outline: solid 1px hotpink; */
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -104,7 +102,16 @@ const TimelineTickWrapper = Styled.ul`
     padding: 0;
     height: 10px;
     border-left: solid 2px rgba(100, 100, 100, 0.8);
+    &:last-of-type {
+      opacity: 0;
+    }
   }
+`
+
+const Separator = Styled.hr`
+  margin: 0;
+  margin-bottom: 2rem;
+  padding: 0;
 `
 
 
@@ -283,6 +290,7 @@ function Dashboard (props) {
       <SectionBottom>
         {/* popup details */}
         { popup && <PopupDetails event={ popup } /> }
+        { popup && <Separator/> }
 
         {/* timeline / scrubber */}
         <TimelineTitle>Timeline of quakes</TimelineTitle>
