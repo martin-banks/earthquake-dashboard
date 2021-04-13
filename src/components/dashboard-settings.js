@@ -3,9 +3,6 @@ import Styled from 'styled-components'
 import InputRange from 'react-input-range'
 import PropTypes from 'prop-types'
 
-// ? Styles have been included intop the global.css file for common use
-// import 'react-input-range/lib/css/index.css'
-
 import formatInputDate from '../functions/format-input-date'
 
 
