@@ -12,7 +12,8 @@ import PopupDetails from './popup-details'
 
 import timelinePosition from '../functions/timline-position'
 import quakeTypes from '../content/quake-types'
-import magnitudeColor from '../functions/magnitude-color' 
+import magnitudeColor from '../functions/magnitude-color'
+import timelineDate from '../functions/format-timeline-date'
 
 
 const Container = Styled.article`
@@ -66,19 +67,51 @@ const Timeline = Styled.section`
   position: relative;
   display: block;
   width: 100%;
-  height: 50px;
 `
 const TimelineTitle = Styled.h3`
   margin-bottom: 0;
 `
+const TimelineMarkWrapper = Styled.div`
+  /* outline: solid 1px lime; */
+  display: block;
+  position: relative;
+  height: 50px;
+  margin-bottom: 2px;
+`
+const TimelineDateWrapper = Styled.ul`
+  /* outline: solid 1px hotpink; */
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-start;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  li {
+    margin: 0;
+    opacity: 0.6;
+  }
+`
+
+const TimelineTickWrapper = Styled.ul`
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+  padding: 0;
+  list-style: none;
+  li {
+    margin: 0;
+    padding: 0;
+    height: 10px;
+    border-left: solid 2px rgba(100, 100, 100, 0.8);
+  }
+`
 
 
 function timelineHeight (mag) {
-  // const height = (((mag + 3) / (max + 3)) * 100)
-  const height = (((mag + 3) / 13) * 100)
+  const height = ((mag + 3) / 13) * 100
   return `${height}%`
 }
-
 
 
 
@@ -255,25 +288,36 @@ function Dashboard (props) {
         <TimelineTitle>Timeline of quakes</TimelineTitle>
         {/* <p>Each mark represents a single quake event</p> */}
         <Timeline>
-          {/* this position is not calcualting correctly */}
-          {
-            eventsToRender &&
-              eventsToRender.map((e, i) => <div
-                className="timelineMark"
-                style={{
-                  left: `${timelinePosition({
-                    from: dateFrom,
-                    to: dateTo,
-                    time: e.properties.time,
-                  })}%`,
-                  // borderColor: `rgba(255, ${200 - ((e.properties.mag + 5) / 20) * 200}, 0, 1)`,
-                  borderColor: magnitudeColor({ mag: e.properties.mag }),
-                  height: timelineHeight(e.properties.mag),
+          <TimelineMarkWrapper>
+            {
+              eventsToRender &&
+                eventsToRender.map((e, i) => <div
+                  className="timelineMark"
+                  style={{
+                    left: `${timelinePosition({
+                      from: dateFrom,
+                      to: dateTo,
+                      time: e.properties.time,
+                    })}%`,
+                    borderColor: magnitudeColor({ mag: e.properties.mag }),
+                    height: timelineHeight(e.properties.mag),
 
-                }}
-                key={ `timeline-mark-${i}` }
-              />)
-          }
+                  }}
+                  key={ `timeline-mark-${i}` }
+                />)
+            }
+          </TimelineMarkWrapper>
+          <TimelineTickWrapper>
+            {
+              [... new Array(((dateTo - dateFrom) / (1000 * 60 * 60 * 24)) + 2)]
+                .map(x => <li />)
+            }
+          </TimelineTickWrapper>
+          <TimelineDateWrapper>
+            <li>{ timelineDate(dateFrom) }</li>
+            <li>{  }</li>
+            <li>{ timelineDate(dateTo) }</li>
+          </TimelineDateWrapper>
         </Timeline>
         <style jsx>{`
           .timelineMark {
