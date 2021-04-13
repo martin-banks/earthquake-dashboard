@@ -137,11 +137,6 @@ function MagnitudeChart (props) {
 
 
   const handleMouseOver = (magKey, e) => {
-    console.log('mouse over', magKey)
-    // updatePopupInfo(prev => ({
-    //   magnitude: magKey,
-    //   count: chartData[`mag__${magKey}`]
-    // }))
     updatePopupInfo({
       magnitude: magKey,
       count: chartData[`mag__${magKey}`],
