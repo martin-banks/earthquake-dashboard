@@ -97,13 +97,21 @@ const TimelineTickWrapper = Styled.ul`
   margin: 2px 0;
   padding: 0;
   list-style: none;
+  opacity: 0.6;
   li {
+    /* outline: solid 1px lime; */
     margin: 0;
     padding: 0;
-    height: 10px;
-    border-left: solid 2px rgba(100, 100, 100, 0.8);
+    /* height: 2rem; */
+    border-left: solid 2px rgba(100, 100, 100, 1);
+    padding-top: 10px;
+    padding-left: 2px;
+    font-family: dharma-gothic-e;
     &:last-of-type {
-      opacity: 0;
+      /* opacity: 0; */
+    }
+    span {
+      line-height: 1;
     }
   }
 `
@@ -317,15 +325,19 @@ function Dashboard (props) {
           </TimelineMarkWrapper>
           <TimelineTickWrapper>
             {
-              [... new Array(((dateTo - dateFrom) / (1000 * 60 * 60 * 24)) + 2)]
-                .map(x => <li />)
+              [... new Array(((dateTo - dateFrom) / (1000 * 60 * 60 * 24)) + 1)]
+                .map((x, i) => {
+                const offset = dateTo - dateFrom
+                const day = 1000 *60 * 60 * 24
+                const time = dateFrom + (i * day)
+                return <li><span>{ timelineDate(time) }</span></li>
+              })
             }
           </TimelineTickWrapper>
-          <TimelineDateWrapper>
+          {/* <TimelineDateWrapper>
             <li>{ timelineDate(dateFrom) }</li>
-            <li>{  }</li>
             <li>{ timelineDate(dateTo) }</li>
-          </TimelineDateWrapper>
+          </TimelineDateWrapper> */}
         </Timeline>
         <style jsx>{`
           .timelineMark {
