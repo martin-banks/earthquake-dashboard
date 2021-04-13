@@ -5,17 +5,18 @@ import PropTypes from 'prop-types'
 import formatDate from '../functions/format-date-time'
 
 
+const Popup = Styled.div`
+  max-width: 1500px;
+  margin: 0 auto;
+`
+
 const Wrapper = Styled.section`
   display: grid;
   grid-template-columns: 250px 250px auto 200px 200px;
   gap: 4rem;
-  border-bottom: solid 1px rgba(0,0,0, 0.4);
   padding: 0;
-  padding-bottom: 2rem;
+  /* padding-bottom: 2rem; */
   margin-bottom: 2rem;
-  @media screen and (prefers-color-scheme: dark) {
-    border-color: rgba(200,200,200, 0.4);
-  }
 `
 
 const Kicker = Styled.h4`
@@ -71,7 +72,7 @@ const Scale = Styled.div`
 function PopupDetails (props) {
   const { event } = props
 
-  return <>
+  return <Popup>
     <Wrapper>
       {/* This is the popup details for events hovered on the globe */}
 
@@ -140,7 +141,7 @@ function PopupDetails (props) {
       </div>
 
     </Wrapper>
-  </>
+  </Popup>
 }
 
 
