@@ -71,6 +71,13 @@ const QuakeTypeLabel = Styled.p`
 const UpdateDates = Styled.button`
   display: block;
   width: 100%;
+  background: ${p => p.active ? 'seagreen' : 'none' };
+  cursor: ${p => p.active ? 'pointer' : 'default'};
+  opacity: ${p => p.active ? 1 : 0.3};
+  &:hover {
+    background: ${p => p.active && 'limegreen'}
+  }
+
 `
 
 
@@ -78,27 +85,14 @@ const UpdateDates = Styled.button`
 
 function DashboardSettings (props) {
 
-  // ! Data required
-
-  // ? props
-  // - range of mags in data set
-  // - current range of mags rendered
-
-
-  // ? state
-  // - lowest mag to render
-  // - highest mag to render
-  // 
-
-
   const {
     magnitudeRange,
     updateMagnitudeRange,
-    setMagnitudesToRender,
+    // setMagnitudesToRender,
 
     dataMagRange,
     renderedMagRange,
-    setRenderedMagRange,
+    // setRenderedMagRange,
 
     quakeTypes,
     updateTypeToShow,
@@ -110,7 +104,7 @@ function DashboardSettings (props) {
 
   const [ showType, setShowType ] = useState(0)
 
-  const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
+  // const [ rangeToUse, updateRangeToUse ] = useState({ min: 0, max: 0 })
 
   // Active min and max values of the magnitude input
   const [ min, updateMin ] = useState(0)
@@ -118,6 +112,8 @@ function DashboardSettings (props) {
   const [ dateFrom, setDateFrom ] = useState(null)
   const [ dateTo, setDateTo ] = useState(null)
   const [ today, setToday ] = useState(formatInputDate(new Date))
+
+  const [ dateChanged, setDateChanged ] = useState(false)
 
   // const [ inputDateFrom, setInputDateFrom ] = useState(null)
   // const [ inputDateTo, setInputDateTo ] = useState(null)
@@ -135,13 +131,13 @@ function DashboardSettings (props) {
 
     setDateTo(dateTo)
     setDateFrom(dateFrom)
-    updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+    // updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
     updateMin(magnitudeRange.min)
     updateMax(magnitudeRange.max)
   }, [ dates ])
 
   useEffect(() => {
-    updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
+    // updateRangeToUse({ min: magnitudeRange.min, max: magnitudeRange.max })
     updateMin(magnitudeRange.min)
     updateMax(magnitudeRange.max)
   }, [ magnitudeRange ])
@@ -180,10 +176,12 @@ function DashboardSettings (props) {
 
 
   const handleUpdateDates = () => {
+    if (!dateChanged) return
     setDates({
       start: new Date(dateFrom),
       end: new Date(dateTo),
     })
+    setDateChanged(false)
   }
 
 
@@ -200,8 +198,9 @@ function DashboardSettings (props) {
             id="date-from"
             type="date"
             max={ dateTo }
-            value={ formatInputDate(dates.start) }
+            value={ dateFrom }
             onChange={ e => {
+              setDateChanged(true)
               setDateFrom(formatInputDate(e?.target?.value))
             }}
           />
@@ -214,14 +213,15 @@ function DashboardSettings (props) {
             type="date"
             min={ dateFrom }
             max={ formatInputDate(today) }
-            value={ formatInputDate(dates.end) }
+            value={ dateTo }
             onChange={ e => {
+              setDateChanged(true)
               setDateTo(formatInputDate(e?.target?.value))
             }}
           />
         </div>
 
-        <UpdateDates onClick={ handleUpdateDates } >
+        <UpdateDates onClick={ handleUpdateDates } active={ dateChanged }>
           Update date range
         </UpdateDates>
       </DateContainer>
@@ -243,9 +243,7 @@ function DashboardSettings (props) {
           updateMax(x.max)
         } }
         onChangeComplete={ x => {
-          console.log('values from input range', x.min, x.max)
           updateMagnitudeRange({ min: x.min, max: x.max })
-          // setMagnitudesToRender({ min: x.min, max: x.max })
         } }
       />
     </Section>
