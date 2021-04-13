@@ -109,6 +109,9 @@ const TimelineTickWrapper = Styled.ul`
     font-family: dharma-gothic-e;
     &:last-of-type {
       /* opacity: 0; */
+      overflow: hidden;
+      width: 0;
+      height: 0;
     }
     span {
       line-height: 1;
